@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Adjust the laptop panel immediately, then coalesce repeated key presses and
+# synchronize the external DDC/CI monitor to the resulting percentage.
+case "$1" in
+    up)
+        brightnessctl --quiet --device=amdgpu_bl1 set +5%
+        ;;
+    down)
+        brightnessctl --quiet --device=amdgpu_bl1 set 5%-
+        ;;
+    *)
+        echo "usage: $0 up|down" >&2
+        exit 2
+        ;;
+esac
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+
+(
+    flock -n 9 || exit 0
+    sleep 0.15
+
+    if grep -qs '^connected$' /sys/class/drm/card*-HDMI-A-1/status; then
+        level=$(brightnessctl --device=amdgpu_bl1 --machine-readable info |
+            awk -F, '{gsub(/%/, "", $4); print $4}')
+
+        if [ -n "$level" ]; then
+            ddcutil setvcp 10 "$level" \
+                --mfg GSM --model RDS-220L --noverify >/dev/null 2>&1
+        fi
+    fi
+) 9>"$runtime_dir/river-brightness.lock" &

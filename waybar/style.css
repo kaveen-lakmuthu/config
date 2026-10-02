@@ -1,0 +1,156 @@
+* {
+    font-family: "Noto Sans", sans-serif;
+    font-size: 11px;
+    border: none;
+    min-height: 0;
+}
+
+window#waybar {
+    background: #101C2C;
+    color: #EEF2F6;
+}
+
+#tags,
+#clock,
+#connectivity,
+#system,
+#tools,
+#tray,
+#custom-power {
+    background: #101C2C;
+    border-radius: 0;
+}
+
+#tags {
+    margin: 0;
+}
+
+#tags button {
+    padding: 0 6px;
+    background: transparent;
+    color: #7D8A9B;
+    border-radius: 0;
+}
+
+#tags button.occupied {
+    color: #C9D3DE;
+}
+
+#tags button.focused {
+    background: #D6AE4A;
+    color: #08111F;
+}
+
+#tags button.urgent {
+    background: #B94747;
+    color: #FFFFFF;
+}
+
+#window {
+    padding: 0 8px;
+    color: #A8B4C3;
+}
+
+#clock {
+    margin: 0;
+    padding: 0 8px;
+    color: #D6AE4A;
+}
+
+#connectivity,
+#system,
+#tools {
+    margin: 0;
+    border-left: 1px solid #17283D;
+}
+
+#custom-clipboard,
+#custom-notifications,
+#custom-keyboard-layout,
+#custom-night-light,
+#custom-microphone,
+#idle_inhibitor,
+#network,
+#pulseaudio,
+#backlight,
+#battery {
+    padding: 0 7px;
+}
+
+#tray {
+    padding: 0 6px;
+}
+
+#tray widget image {
+    color: #EEF2F6;
+    -gtk-icon-style: symbolic;
+}
+
+#custom-power {
+    margin: 0;
+    padding: 0 8px;
+    border-left: 1px solid #17283D;
+    color: #B94747;
+    font-size: 14px;
+}
+
+#custom-notifications.dnd {
+    color: #D6AE4A;
+}
+
+#custom-keyboard-layout.english {
+    color: #4C83C3;
+}
+
+#custom-keyboard-layout.sinhala {
+    color: #79AFC7;
+}
+
+#custom-night-light.active {
+    color: #D6AE4A;
+}
+
+#custom-night-light.inactive {
+    color: #7D8A9B;
+}
+
+#idle_inhibitor.activated {
+    background: transparent;
+    color: #D6AE4A;
+}
+
+#idle_inhibitor.deactivated {
+    color: #7D8A9B;
+}
+
+#network,
+#pulseaudio,
+#backlight {
+    color: #79AFC7;
+}
+
+#custom-microphone.active {
+    color: #B94747;
+}
+
+#custom-microphone.muted,
+#custom-microphone.unavailable {
+    color: #7D8A9B;
+}
+
+#battery {
+    color: #EEF2F6;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: #5F9C83;
+}
+
+#battery.warning {
+    color: #D6AE4A;
+}
+
+#battery.critical {
+    color: #B94747;
+}

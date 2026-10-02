@@ -1,0 +1,36 @@
+#!/bin/sh
+
+has_battery=false
+on_external_power=false
+
+for supply in /sys/class/power_supply/*
+do
+    [ -d "$supply" ] || continue
+
+    case "$(cat "$supply/type" 2>/dev/null)" in
+        Battery)
+            has_battery=true
+            ;;
+        Mains|USB|USB_C)
+            if [ "$(cat "$supply/online" 2>/dev/null)" = '1' ]; then
+                on_external_power=true
+            fi
+            ;;
+    esac
+done
+
+case ${1:-} in
+    battery)
+        # Desktops and laptops on external power use the longer timeout.
+        if [ "$has_battery" = true ] && [ "$on_external_power" = false ]; then
+            systemctl suspend
+        fi
+        ;;
+    always)
+        systemctl suspend
+        ;;
+    *)
+        printf 'usage: %s {battery|always}\n' "$0" >&2
+        exit 2
+        ;;
+esac

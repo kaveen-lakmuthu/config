@@ -1,0 +1,62 @@
+#!/bin/sh
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+state_file="$runtime_dir/river-keyboard-layout"
+
+current_layout() {
+    if [ -r "$state_file" ]; then
+        layout=$(sed -n '1p' "$state_file")
+    else
+        layout='us'
+    fi
+
+    case "$layout" in
+        us|lk) printf '%s\n' "$layout" ;;
+        *)     printf '%s\n' 'us' ;;
+    esac
+}
+
+set_layout() {
+    case "$1" in
+        us|lk) ;;
+        *) return 2 ;;
+    esac
+
+    # Keep Caps Lock and Alt behavior intact; use Right Ctrl as Compose.
+    if riverctl keyboard-layout \
+        -options 'compose:rctrl' \
+        "$1"
+    then
+        printf '%s\n' "$1" > "$state_file"
+    fi
+}
+
+status() {
+    case "$(current_layout)" in
+        lk)
+            printf '%s\n' '{"text":"සිං","class":"sinhala","tooltip":"Sinhala (phonetic) · click to switch to English (US)"}'
+            ;;
+        *)
+            printf '%s\n' '{"text":"US","class":"english","tooltip":"English (US) · click to switch to Sinhala (phonetic)"}'
+            ;;
+    esac
+}
+
+case ${1:-status} in
+    set)
+        [ "$#" -eq 2 ] || exit 2
+        set_layout "$2"
+        ;;
+    toggle)
+        if [ "$(current_layout)" = 'us' ]; then
+            set_layout lk
+        else
+            set_layout us
+        fi
+        ;;
+    status) status ;;
+    *)
+        printf 'usage: %s {set us|set lk|toggle|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

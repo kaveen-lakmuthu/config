@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+output_dir=$(CDPATH= cd -- "$source_dir/../../bin" && pwd)
+build_dir=$(mktemp -d)
+trap 'rm -rf "$build_dir"' EXIT HUP INT TERM
+
+wayland-scanner client-header \
+    "$source_dir/river-status-unstable-v1.xml" \
+    "$build_dir/river-status-unstable-v1-client-protocol.h"
+
+wayland-scanner private-code \
+    "$source_dir/river-status-unstable-v1.xml" \
+    "$build_dir/river-status-unstable-v1-client-protocol.c"
+
+cc -std=c11 -O2 -Wall -Wextra -Wpedantic \
+    -I"$build_dir" \
+    "$source_dir/river-cycle-tags.c" \
+    "$build_dir/river-status-unstable-v1-client-protocol.c" \
+    $(pkg-config --cflags --libs wayland-client) \
+    -o "$output_dir/river-cycle-tags"
+

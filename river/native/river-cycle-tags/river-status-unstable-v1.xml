@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="river_status_unstable_v1">
+  <copyright>
+    Copyright 2020 The River Developers
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  </copyright>
+
+  <interface name="zriver_status_manager_v1" version="4">
+    <description summary="manage river status objects">
+      A global factory for objects that receive status information specific
+      to river.
+    </description>
+
+    <request name="destroy" type="destructor"/>
+
+    <request name="get_river_output_status">
+      <arg name="id" type="new_id" interface="zriver_output_status_v1"/>
+      <arg name="output" type="object" interface="wl_output"/>
+    </request>
+
+    <request name="get_river_seat_status">
+      <arg name="id" type="new_id" interface="zriver_seat_status_v1"/>
+      <arg name="seat" type="object" interface="wl_seat"/>
+    </request>
+  </interface>
+
+  <interface name="zriver_output_status_v1" version="4">
+    <description summary="track output tags and focus"/>
+
+    <request name="destroy" type="destructor"/>
+
+    <event name="focused_tags">
+      <arg name="tags" type="uint" summary="32-bit bitfield"/>
+    </event>
+
+    <event name="view_tags">
+      <arg name="tags" type="array" summary="array of 32-bit bitfields"/>
+    </event>
+
+    <event name="urgent_tags" since="2">
+      <arg name="tags" type="uint" summary="32-bit bitfield"/>
+    </event>
+
+    <event name="layout_name" since="4">
+      <arg name="name" type="string" summary="layout name"/>
+    </event>
+
+    <event name="layout_name_clear" since="4"/>
+  </interface>
+
+  <interface name="zriver_seat_status_v1" version="3">
+    <description summary="track seat focus"/>
+
+    <request name="destroy" type="destructor"/>
+
+    <event name="focused_output">
+      <arg name="output" type="object" interface="wl_output"/>
+    </event>
+
+    <event name="unfocused_output">
+      <arg name="output" type="object" interface="wl_output"/>
+    </event>
+
+    <event name="focused_view">
+      <arg name="title" type="string" summary="title of the focused view"/>
+    </event>
+
+    <event name="mode" since="3">
+      <arg name="name" type="string" summary="active mode name"/>
+    </event>
+  </interface>
+</protocol>
+

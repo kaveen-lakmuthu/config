@@ -1,0 +1,18 @@
+#!/bin/sh
+
+status=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null) || {
+    printf '%s\n' '{"text":"MIC --","class":"unavailable","tooltip":"No default microphone available"}'
+    exit 0
+}
+
+volume=$(printf '%s\n' "$status" | awk '{ printf "%.0f", $2 * 100 }')
+
+case $status in
+    *MUTED*)
+        printf '%s\n' '{"text":"MIC OFF","class":"muted","tooltip":"Microphone muted — click to unmute"}'
+        ;;
+    *)
+        printf '{"text":"MIC %s%%","class":"active","tooltip":"Microphone active at %s%% — click to mute"}\n' \
+            "$volume" "$volume"
+        ;;
+esac

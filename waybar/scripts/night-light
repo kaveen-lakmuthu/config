@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# Manual sunrise/sunset keeps this predictable without a location service.
+# Adjust these values if your preferred schedule changes.
+sunrise='06:00'
+sunset='18:30'
+temperature='4000'
+transition='1800'
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+pid_file="$runtime_dir/river-wlsunset.pid"
+
+is_running() {
+    [ -r "$pid_file" ] || return 1
+    pid=$(sed -n '1p' "$pid_file")
+    case "$pid" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    kill -0 "$pid" 2>/dev/null &&
+        [ "$(cat "/proc/$pid/comm" 2>/dev/null)" = 'wlsunset' ]
+}
+
+start() {
+    is_running && return 0
+    wlsunset \
+        -S "$sunrise" \
+        -s "$sunset" \
+        -d "$transition" \
+        -t "$temperature" \
+        -T 6500 \
+        >/dev/null 2>&1 &
+    printf '%s\n' "$!" > "$pid_file"
+}
+
+stop() {
+    if is_running; then
+        kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+}
+
+status() {
+    if is_running; then
+        printf '%s\n' '{"text":"NIGHT","class":"active","tooltip":"Night light enabled · click to disable"}'
+    else
+        printf '%s\n' '{"text":"DAY","class":"inactive","tooltip":"Night light disabled · click to enable"}'
+    fi
+}
+
+case ${1:-status} in
+    start)  start ;;
+    stop)   stop ;;
+    toggle)
+        if is_running; then
+            stop
+        else
+            start
+        fi
+        ;;
+    status) status ;;
+    *)
+        printf 'usage: %s {start|stop|toggle|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

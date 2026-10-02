@@ -1,0 +1,20 @@
+#!/bin/sh
+
+config_dir=${XDG_CONFIG_HOME:-"$HOME/.config"}
+
+# Always make the lock-screen password entry use the predictable US layout.
+"$config_dir/waybar/scripts/keyboard-layout" set us >/dev/null 2>&1 || true
+
+# The session may already be locked when a sleep event arrives.
+if pgrep -u "$(id -u)" -x gtklock >/dev/null 2>&1 ||
+   pgrep -u "$(id -u)" -x swaylock >/dev/null 2>&1; then
+    exit 0
+fi
+
+# gtklock provides the live date/clock and full password form. Keep the styled
+# swaylock path as a safe fallback until gtklock is installed.
+if command -v gtklock >/dev/null 2>&1; then
+    exec env GTK_THEME=Breeze-Dark gtklock --daemonize
+fi
+
+exec swaylock --daemonize --config "$config_dir/swaylock/config"

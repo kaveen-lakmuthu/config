@@ -1,0 +1,171 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 26,
+  "spacing": 0,
+  "margin-top": 0,
+  "margin-right": 0,
+  "margin-bottom": 0,
+  "margin-left": 0,
+
+  "modules-left": [
+    "river/tags",
+    "river/window"
+  ],
+
+  "modules-center": [
+    "clock"
+  ],
+
+  "modules-right": [
+    "group/connectivity",
+    "group/system",
+    "group/tools",
+    "custom/power"
+  ],
+
+  "group/connectivity": {
+    "orientation": "horizontal",
+    "modules": [
+      "network",
+      "tray"
+    ]
+  },
+
+  "group/system": {
+    "orientation": "horizontal",
+    "modules": [
+      "pulseaudio",
+      "custom/microphone",
+      "backlight",
+      "battery"
+    ]
+  },
+
+  "group/tools": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/notifications",
+      "custom/clipboard",
+      "custom/keyboard-layout",
+      "custom/night-light",
+      "idle_inhibitor"
+    ]
+  },
+
+  "river/tags": {
+    "num-tags": 9,
+    "on-scroll-up": "$HOME/.config/river/bin/river-cycle-tags previous 9",
+    "on-scroll-down": "$HOME/.config/river/bin/river-cycle-tags next 9",
+    "smooth-scrolling-threshold": 1.0
+  },
+
+  "river/window": {
+    "max-length": 50
+  },
+
+  "clock": {
+    "format": "{:%a %d/%m/%Y (%b)  %H:%M:%S}",
+    "interval": 1
+  },
+
+  "network": {
+    "format-wifi": "Wi-Fi {essid}",
+    "format-ethernet": "Ethernet",
+    "format-disconnected": "Offline",
+    "tooltip": true,
+    "on-click": "nm-connection-editor"
+  },
+
+  "custom/clipboard": {
+    "format": "CLIP",
+    "tooltip-format": "Clipboard history",
+    "on-click": "$HOME/.config/waybar/scripts/desktop-panel.py clipboard"
+  },
+
+  "custom/notifications": {
+    "exec": "$HOME/.config/waybar/scripts/desktop-panel.py notifications --status",
+    "return-type": "json",
+    "interval": 5,
+    "on-click": "$HOME/.config/waybar/scripts/desktop-panel.py notifications"
+  },
+
+  "custom/keyboard-layout": {
+    "exec": "$HOME/.config/waybar/scripts/keyboard-layout status",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "$HOME/.config/waybar/scripts/keyboard-layout toggle"
+  },
+
+  "custom/night-light": {
+    "exec": "$HOME/.config/waybar/scripts/night-light status",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "$HOME/.config/waybar/scripts/night-light toggle"
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "<s>IDLE</s>",
+      "deactivated": "IDLE"
+    },
+    "tooltip-format-activated": "Idle inhibition active",
+    "tooltip-format-deactivated": "Idle inhibition inactive"
+  },
+
+  "pulseaudio": {
+    "format": "VOL {volume}%",
+    "format-muted": "Muted",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "pavucontrol",
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+  },
+
+  "custom/microphone": {
+    "exec": "$HOME/.config/waybar/scripts/microphone-status",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-click-right": "pavucontrol",
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
+  },
+
+  "backlight": {
+    "device": "amdgpu_bl1",
+    "format": "BRT {percent}%",
+    "tooltip-format": "Click for display brightness controls",
+    "on-click": "$HOME/.config/waybar/scripts/brightness-panel.py",
+    "on-scroll-up": "$HOME/.config/river/scripts/brightness up",
+    "on-scroll-down": "$HOME/.config/river/scripts/brightness down"
+  },
+
+  "battery": {
+    "interval": 30,
+    "format": "BAT {capacity}%",
+    "format-charging": "BAT {capacity}% +",
+    "format-full": "BAT 100%",
+    "states": {
+      "warning": 25,
+      "critical": 12
+    },
+    "events": {
+      "on-discharging-warning": "sh -c 'level=$(cat /sys/class/power_supply/BAT0/capacity); notify-send -a Battery -u normal \"Low battery\" \"Battery is at ${level}%.\"'",
+      "on-discharging-critical": "sh -c 'level=$(cat /sys/class/power_supply/BAT0/capacity); notify-send -a Battery -u critical \"Critical battery\" \"Battery is at ${level}%. Connect a charger.\"'"
+    }
+  },
+
+  "tray": {
+    "icon-size": 14,
+    "spacing": 5
+  },
+
+  "custom/power": {
+    "format": "⏻",
+    "tooltip-format": "Session and power controls",
+    "on-click": "$HOME/.config/waybar/scripts/power-menu"
+  }
+}

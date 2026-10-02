@@ -1,0 +1,20 @@
+font=Noto Sans 10
+
+background-color=#101C2C
+text-color=#EEF2F6
+border-color=#D6AE4A
+
+border-size=2
+border-radius=8
+
+padding=12
+margin=10
+
+width=360
+default-timeout=5000
+max-history=25
+
+anchor=top-right
+
+[mode=do-not-disturb]
+invisible=1

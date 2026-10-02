@@ -1,0 +1,120 @@
+/* River lock screen — Númenórean dark palette */
+
+* {
+    font-family: "Noto Sans", sans-serif;
+    color: #EEF2F6;
+    text-shadow: none;
+}
+
+window {
+    background-color: #08111F;
+    background-image: linear-gradient(145deg, #08111F, #101C2C);
+}
+
+#window-box {
+    min-width: 440px;
+    padding: 34px 42px 38px;
+    margin: 0;
+    background-color: rgba(16, 28, 44, 0.96);
+    border: 2px solid #D6AE4A;
+    border-radius: 18px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+#info-box,
+#time-box {
+    margin: 0;
+    padding: 0;
+}
+
+#clock-label {
+    color: #D6AE4A;
+    font-size: 64px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+
+#date-label {
+    color: #A8B4C3;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 2px;
+    margin-bottom: 24px;
+}
+
+#body-grid {
+    margin-top: 4px;
+}
+
+#input-label {
+    color: #A8B4C3;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+#input-field {
+    min-height: 42px;
+    padding: 3px 14px;
+    color: #EEF2F6;
+    caret-color: #D6AE4A;
+    background-color: #08111F;
+    border: 1px solid #4C83C3;
+    border-radius: 9px;
+    box-shadow: none;
+}
+
+#input-field:focus {
+    border: 2px solid #D6AE4A;
+    box-shadow: 0 0 0 3px rgba(214, 174, 74, 0.14);
+}
+
+#input-field image {
+    color: #79AFC7;
+}
+
+#unlock-button {
+    min-height: 40px;
+    min-width: 90px;
+    padding: 2px 16px;
+    margin-top: 10px;
+    color: #08111F;
+    background-color: #D6AE4A;
+    border: 1px solid #D6AE4A;
+    border-radius: 9px;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+#unlock-button:hover,
+#unlock-button:focus {
+    background-color: #E7C766;
+    border-color: #E7C766;
+}
+
+#unlock-button:active {
+    background-color: #79AFC7;
+    border-color: #79AFC7;
+}
+
+#warning-label {
+    color: #D6AE4A;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+#error-label {
+    color: #B94747;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+#message-box {
+    margin-top: 8px;
+    padding: 8px 10px;
+    color: #A8B4C3;
+    background-color: #17283D;
+    border-radius: 7px;
+}
+

@@ -1,0 +1,21 @@
+swipe:
+  3:
+    left:
+      command: "/home/kaveen/.config/river/bin/river-cycle-tags next 9"
+    right:
+      command: "/home/kaveen/.config/river/bin/river-cycle-tags previous 9"
+
+# Require a deliberate swipe, then briefly debounce repeated gestures.
+threshold:
+  swipe: 0.5
+
+interval:
+  swipe: 0.6
+
+# Ignore mice and any other libinput devices Fusuma may discover.
+plugin:
+  filters:
+    libinput_device_filter:
+      keep_device_names:
+        - "MSFT0001:00 04F3:31BE Touchpad"
+

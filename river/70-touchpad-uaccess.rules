@@ -1,0 +1,4 @@
+# Give only the active local session access to touchpad event devices.
+# Install as /etc/udev/rules.d/70-touchpad-uaccess.rules.
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_TOUCHPAD}=="1", TAG+="uaccess"
+

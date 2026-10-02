@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Select a tmux session in an in-terminal popup. Session IDs are used for the
+# actual switch so names containing spaces remain safe.
+[ -n "${TMUX:-}" ] || {
+    printf '%s\n' 'The session switcher must be run from inside tmux.' >&2
+    exit 1
+}
+
+tab=$(printf '\t')
+
+selection=$(
+    tmux list-sessions -F "#{session_id}${tab}#{session_name}${tab}#{session_windows} windows${tab}#{?session_attached,attached,detached}" |
+        fzf \
+            --delimiter="$tab" \
+            --with-nth=2.. \
+            --layout=reverse \
+            --info=inline \
+            --prompt='session > ' \
+            --pointer='›' \
+            --marker='✓' \
+            --border=rounded \
+            --color='bg:#101C2C,bg+:#17283D,fg:#A8B4C3,fg+:#EEF2F6,hl:#79AFC7,hl+:#D6AE4A,border:#4C83C3,prompt:#D6AE4A,pointer:#D6AE4A,marker:#5F9C83,spinner:#79AFC7,header:#A8B4C3'
+) || exit 0
+
+[ -n "$selection" ] || exit 0
+session_id=${selection%%"$tab"*}
+
+tmux switch-client -t "$session_id"
+

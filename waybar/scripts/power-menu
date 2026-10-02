@@ -1,0 +1,34 @@
+#!/bin/sh
+
+choice=$(
+    printf '%s\n' 'Lock' 'Suspend' 'Log out' 'Reboot' 'Power off' |
+        fuzzel --dmenu --only-match --width=24 --lines=5 --prompt='Power> '
+)
+
+confirm_action()
+{
+    action=$1
+    answer=$(
+        printf '%s\n' 'Cancel' "Confirm $action" |
+            fuzzel --dmenu --only-match --width=24 --lines=2 --prompt='Confirm> '
+    )
+    [ "$answer" = "Confirm $action" ]
+}
+
+case "$choice" in
+    Lock)
+        "$HOME/.config/river/scripts/lock-screen"
+        ;;
+    Suspend)
+        systemctl suspend
+        ;;
+    'Log out')
+        confirm_action 'log out' && riverctl exit
+        ;;
+    Reboot)
+        confirm_action 'reboot' && systemctl reboot
+        ;;
+    'Power off')
+        confirm_action 'power off' && systemctl poweroff
+        ;;
+esac
