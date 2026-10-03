@@ -18,23 +18,17 @@
   ],
 
   "modules-right": [
-    "group/connectivity",
-    "group/system",
-    "group/tools",
+    "group/status",
+    "group/session",
+    "group/history",
+    "tray",
     "custom/power"
   ],
 
-  "group/connectivity": {
+  "group/status": {
     "orientation": "horizontal",
     "modules": [
       "network",
-      "tray"
-    ]
-  },
-
-  "group/system": {
-    "orientation": "horizontal",
-    "modules": [
       "pulseaudio",
       "custom/microphone",
       "backlight",
@@ -42,14 +36,20 @@
     ]
   },
 
-  "group/tools": {
+  "group/session": {
     "orientation": "horizontal",
     "modules": [
-      "custom/notifications",
-      "custom/clipboard",
       "custom/keyboard-layout",
       "custom/night-light",
       "idle_inhibitor"
+    ]
+  },
+
+  "group/history": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/notifications",
+      "custom/clipboard"
     ]
   },
 

@@ -3,7 +3,7 @@
 # Manual sunrise/sunset keeps this predictable without a location service.
 # Adjust these values if your preferred schedule changes.
 sunrise='06:00'
-sunset='18:30'
+sunset='18:00'
 temperature='4000'
 transition='1800'
 

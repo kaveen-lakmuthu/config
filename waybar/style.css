@@ -12,9 +12,9 @@ window#waybar {
 
 #tags,
 #clock,
-#connectivity,
-#system,
-#tools,
+#status,
+#session,
+#history,
 #tray,
 #custom-power {
     background: #101C2C;
@@ -54,12 +54,13 @@ window#waybar {
 #clock {
     margin: 0;
     padding: 0 8px;
-    color: #D6AE4A;
+    color: #EEF2F6;
 }
 
-#connectivity,
-#system,
-#tools {
+#status,
+#session,
+#history,
+#tray {
     margin: 0;
     border-left: 1px solid #17283D;
 }
@@ -75,6 +76,7 @@ window#waybar {
 #backlight,
 #battery {
     padding: 0 7px;
+    color: #EEF2F6;
 }
 
 #tray {
@@ -98,20 +100,12 @@ window#waybar {
     color: #D6AE4A;
 }
 
-#custom-keyboard-layout.english {
-    color: #4C83C3;
-}
-
-#custom-keyboard-layout.sinhala {
-    color: #79AFC7;
-}
-
 #custom-night-light.active {
     color: #D6AE4A;
 }
 
 #custom-night-light.inactive {
-    color: #7D8A9B;
+    color: #EEF2F6;
 }
 
 #idle_inhibitor.activated {
@@ -120,26 +114,21 @@ window#waybar {
 }
 
 #idle_inhibitor.deactivated {
-    color: #7D8A9B;
-}
-
-#network,
-#pulseaudio,
-#backlight {
-    color: #79AFC7;
+    color: #EEF2F6;
 }
 
 #custom-microphone.active {
     color: #B94747;
 }
 
-#custom-microphone.muted,
-#custom-microphone.unavailable {
-    color: #7D8A9B;
+#custom-microphone.muted {
+    color: #EEF2F6;
 }
 
-#battery {
-    color: #EEF2F6;
+#custom-microphone.unavailable,
+#network.disconnected,
+#pulseaudio.muted {
+    color: #7D8A9B;
 }
 
 #battery.charging,

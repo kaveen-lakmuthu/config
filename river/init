@@ -293,9 +293,38 @@ riverctl rule-add -app-id 'blueman-manager' float
 riverctl rule-add -app-id 'nm-connection-editor' float
 riverctl rule-add -app-id 'org.kde.kcalc' float
 
-# Generic dialog titles
-riverctl rule-add -title 'Open File' float
-riverctl rule-add -title 'Save File' float
+# Media players. Keep both native Wayland and compatibility app IDs since the
+# exact ID can differ with the toolkit/backend used at launch.
+riverctl rule-add -app-id 'org.kde.haruna' float
+riverctl rule-add -app-id 'haruna' float
+riverctl rule-add -app-id 'vlc' float
+riverctl rule-add -app-id 'org.videolan.VLC' float
+
+# The GTK portal owns open/save/download file choosers for both browsers. Its
+# dialogs sometimes have an empty or browser-generated title, so app ID is the
+# reliable match. Both IDs are kept for GTK/backend version differences.
+riverctl rule-add -app-id 'xdg-desktop-portal-gtk' float
+riverctl rule-add -app-id 'org.freedesktop.impl.portal.desktop.gtk' float
+
+# Browser-owned confirmation and file dialogs. Their titles can include a site,
+# filename, or browser name, so use stable prefixes/suffixes where available.
+for browser_id in 'firefox' 'org.mozilla.firefox' 'brave-origin' 'com.brave.Origin'
+do
+    for dialog_title in 'Open File*' 'Save File*' 'Save As*' 'Choose File*' 'Select File*' 'File Upload*' 'Download*' 'Opening *' '* wants to open'
+    do
+        riverctl rule-add -app-id "$browser_id" -title "$dialog_title" float
+    done
+done
+
+# Portal/toolkit file choosers can have their own app ID instead of the
+# browser's. These narrow title-prefix fallbacks cover those dialogs too.
+riverctl rule-add -title 'Open File*' float
+riverctl rule-add -title 'Save File*' float
+riverctl rule-add -title 'Save As*' float
+riverctl rule-add -title 'Choose File*' float
+riverctl rule-add -title 'Select File*' float
+riverctl rule-add -title 'File Upload*' float
+riverctl rule-add -title '* wants to open' float
 
 # -----------------------------------------------------------------------------
 # Default layout
