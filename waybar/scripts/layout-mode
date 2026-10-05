@@ -1,0 +1,102 @@
+#!/bin/sh
+set -u
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+state_file="$runtime_dir/river-global-layout-mode"
+lock_file="$runtime_dir/river-global-layout-mode.lock"
+
+current_mode() {
+    if [ -r "$state_file" ]; then
+        mode=$(sed -n '1p' "$state_file")
+    else
+        mode='tiled'
+    fi
+
+    case "$mode" in
+        tiled|floating) printf '%s\n' "$mode" ;;
+        *)              printf '%s\n' 'tiled' ;;
+    esac
+}
+
+connected_output_count() {
+    wlopm 2>/dev/null |
+        awk 'NF >= 2 { count++ } END { print count + 0 }'
+}
+
+apply_mode() {
+    mode=$1
+    case "$mode" in
+        tiled)
+            namespace='rivertile'
+            focus_policy='normal'
+            ;;
+        floating)
+            namespace='floating'
+            focus_policy='disabled'
+            ;;
+        *) return 2 ;;
+    esac
+
+    count=$(connected_output_count)
+    [ "$count" -gt 0 ] || return 1
+
+    # Apply to each connected output by walking the focus cycle. Advancing once
+    # after every output also returns focus to the output where we started.
+    index=0
+    failed=0
+    while [ "$index" -lt "$count" ]; do
+        riverctl output-layout "$namespace" || failed=1
+        riverctl focus-output next || failed=1
+        index=$((index + 1))
+    done
+
+    # Focus-follows-pointer is convenient for tiled windows, but makes
+    # overlapping floating windows unpredictable and can change the target
+    # while moving to the Waybar window-control panel.
+    riverctl focus-follows-cursor "$focus_policy" || failed=1
+
+    [ "$failed" -eq 0 ] || return 1
+    printf '%s\n' "$mode" > "$state_file"
+}
+
+set_mode() {
+    # A Waybar click and a Kanshi profile event may arrive together.
+    exec 9>"$lock_file"
+    flock 9
+    apply_mode "$1"
+}
+
+status() {
+    case "$(current_mode)" in
+        floating)
+            printf '%s\n' '{"text":"FLOAT","class":"floating","tooltip":"Global floating mode · click to return all outputs to rivertile"}'
+            ;;
+        *)
+            printf '%s\n' '{"text":"TILE","class":"tiled","tooltip":"Global tiled mode · click to use floating mode on all outputs"}'
+            ;;
+    esac
+}
+
+case ${1:-status} in
+    set)
+        [ "$#" -eq 2 ] || exit 2
+        set_mode "$2"
+        ;;
+    toggle)
+        if [ "$(current_mode)" = 'tiled' ]; then
+            set_mode floating
+        else
+            set_mode tiled
+        fi
+        ;;
+    reapply)
+        set_mode "$(current_mode)"
+        ;;
+    status)
+        status
+        ;;
+    *)
+        printf 'usage: %s {set tiled|set floating|toggle|reapply|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

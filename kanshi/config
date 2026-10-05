@@ -1,8 +1,10 @@
 profile docked {
     output HDMI-A-1 mode 1920x1080 position 0,0
     output eDP-1 mode 1920x1080 position 1920,0
+    exec ~/.config/waybar/scripts/layout-mode reapply
 }
 
 profile undocked {
     output eDP-1 mode 1920x1080 position 0,0
+    exec ~/.config/waybar/scripts/layout-mode reapply
 }

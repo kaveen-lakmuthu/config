@@ -1,0 +1,38 @@
+#!/bin/sh
+set -eu
+
+mode=${1:-}
+directory=${XDG_PICTURES_DIR:-"$HOME/Pictures"}/Screenshots
+mkdir -p "$directory"
+filename="$directory/$(date +%Y-%m-%d_%H-%M-%S).png"
+
+# Give a Waybar popup enough time to unmap before grim reads the output.
+sleep 0.2
+
+select_region() {
+    slurp 2>/dev/null || return 1
+}
+
+saved() {
+    notify-send -a Screenshot "Screenshot saved" "$filename"
+}
+
+case "$mode" in
+    full)
+        grim "$filename"
+        saved
+        ;;
+    region)
+        geometry=$(select_region) || exit 0
+        grim -g "$geometry" "$filename"
+        saved
+        ;;
+    annotate)
+        geometry=$(select_region) || exit 0
+        grim -g "$geometry" - | swappy -f -
+        ;;
+    *)
+        printf 'usage: %s {full|region|annotate}\n' "$0" >&2
+        exit 2
+        ;;
+esac

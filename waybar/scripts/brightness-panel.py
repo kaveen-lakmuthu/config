@@ -13,7 +13,9 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
-from gi.repository import Gdk, GLib, Gtk, GtkLayerShell
+from gi.repository import Gdk, GLib, Gtk
+
+from layer_popup import configure_layer_popup
 
 
 LAPTOP_DEVICE = "amdgpu_bl1"
@@ -67,20 +69,12 @@ class BrightnessPanel(Gtk.Window):
         self.set_resizable(False)
         self.connect("key-press-event", self.on_key_press)
 
-        GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_namespace(self, "brightness-panel")
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        # Waybar's exclusive zone already accounts for its own height.
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 10)
-        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
-
         self.pending = {}
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        outer.set_border_width(14)
-        self.add(outer)
+        outer.set_border_width(16)
+        card.pack_start(outer, True, True, 0)
+        configure_layer_popup(self, card, "brightness-panel", top=4, right=10)
 
         header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         title = Gtk.Label(label="Brightness")
@@ -208,6 +202,9 @@ class BrightnessPanel(Gtk.Window):
 def install_style():
     css = b"""
     window#brightness-panel {
+        background-color: transparent;
+    }
+    #brightness-panel-card {
         background-color: #101C2C;
         color: #EEF2F6;
         border: 2px solid #D6AE4A;

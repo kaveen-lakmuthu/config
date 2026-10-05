@@ -13,7 +13,9 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
-from gi.repository import Gdk, GLib, Gtk, GtkLayerShell, Pango
+from gi.repository import Gdk, GLib, Gtk, Pango
+
+from layer_popup import configure_layer_popup
 
 
 def run(command, *, input_data=None):
@@ -82,19 +84,11 @@ class Panel(Gtk.Window):
         self.set_resizable(False)
         self.connect("key-press-event", self.on_key_press)
 
-        GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_namespace(self, "desktop-panel")
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        # Waybar's exclusive zone already accounts for its own height.
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 6)
-        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
-
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        self.outer.set_border_width(12)
-        self.add(self.outer)
+        self.outer.set_border_width(16)
+        card.pack_start(self.outer, True, True, 0)
+        configure_layer_popup(self, card, "desktop-panel", top=4, right=6)
 
         self.header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         title_label = Gtk.Label(label=title)
@@ -313,6 +307,9 @@ class NotificationPanel(Panel):
 def install_style():
     css = b"""
     window#desktop-panel {
+        background-color: transparent;
+    }
+    #desktop-panel-card {
         background-color: #101C2C;
         color: #EEF2F6;
         border: 2px solid #D6AE4A;

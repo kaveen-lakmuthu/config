@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+
+source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+output_dir=$(CDPATH= cd -- "$source_dir/../../bin" && pwd)
+build_dir=$(mktemp -d)
+trap 'rm -rf "$build_dir"' EXIT HUP INT TERM
+
+for protocol in idle-inhibit-unstable-v1 wlr-layer-shell-unstable-v1
+do
+    wayland-scanner client-header \
+        "$source_dir/$protocol.xml" \
+        "$build_dir/$protocol-client-protocol.h"
+    wayland-scanner private-code \
+        "$source_dir/$protocol.xml" \
+        "$build_dir/$protocol-client-protocol.c"
+done
+
+cc -std=c11 -O2 -Wall -Wextra -Wpedantic \
+    -I"$build_dir" \
+    "$source_dir/river-idle-inhibitor.c" \
+    "$build_dir/idle-inhibit-unstable-v1-client-protocol.c" \
+    "$build_dir/wlr-layer-shell-unstable-v1-client-protocol.c" \
+    $(pkg-config --cflags --libs wayland-client) \
+    -o "$output_dir/river-idle-inhibitor"

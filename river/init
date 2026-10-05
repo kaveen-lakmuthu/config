@@ -184,6 +184,8 @@ riverctl map normal Super Left \
 # -----------------------------------------------------------------------------
 
 riverctl map normal Super Space toggle-float
+riverctl map normal Super+Shift Space spawn \
+    '$HOME/.config/waybar/scripts/layout-mode toggle'
 riverctl map normal Super F toggle-fullscreen
 
 # -----------------------------------------------------------------------------
@@ -269,13 +271,13 @@ done
 # -----------------------------------------------------------------------------
 
 riverctl map normal None Print spawn \
-    'sh -c "grim \"$HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png\""'
+    '$HOME/.config/river/scripts/screenshot full'
 
 riverctl map normal Super Print spawn \
-    'sh -c "grim -g \"$(slurp)\" \"$HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png\""'
+    '$HOME/.config/river/scripts/screenshot region'
 
 riverctl map normal Super+Shift Print spawn \
-    'sh -c "grim -g \"$(slurp)\" - | swappy -f -"'
+    '$HOME/.config/river/scripts/screenshot annotate'
 
 # -----------------------------------------------------------------------------
 # Lock

@@ -1,0 +1,33 @@
+#!/bin/sh
+set -eu
+
+service='net.hadess.PowerProfiles'
+object='/net/hadess/PowerProfiles'
+interface='net.hadess.PowerProfiles'
+
+current_profile() {
+    busctl --system get-property \
+        "$service" "$object" "$interface" ActiveProfile 2>/dev/null |
+        sed -n 's/^s "\([^"]*\)"$/\1/p'
+}
+
+case ${1:-status} in
+    status)
+        current_profile
+        ;;
+    set)
+        case ${2:-} in
+            power-saver|balanced|performance) profile=$2 ;;
+            *)
+                printf 'usage: %s set {power-saver|balanced|performance}\n' "$0" >&2
+                exit 2
+                ;;
+        esac
+        busctl --system set-property \
+            "$service" "$object" "$interface" ActiveProfile s "$profile"
+        ;;
+    *)
+        printf 'usage: %s {status|set PROFILE}\n' "$0" >&2
+        exit 2
+        ;;
+esac

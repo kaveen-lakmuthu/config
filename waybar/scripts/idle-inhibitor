@@ -1,0 +1,50 @@
+#!/bin/sh
+set -u
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+pid_file="$runtime_dir/river-idle-inhibitor.pid"
+helper="$HOME/.config/river/bin/river-idle-inhibitor"
+
+is_running() {
+    [ -r "$pid_file" ] || return 1
+    pid=$(sed -n '1p' "$pid_file")
+    case "$pid" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    kill -0 "$pid" 2>/dev/null &&
+        [ "$(readlink "/proc/$pid/exe" 2>/dev/null)" = "$helper" ]
+}
+
+start() {
+    is_running && return 0
+    "$helper" >/dev/null 2>&1 &
+    pid=$!
+    printf '%s\n' "$pid" > "$pid_file"
+    sleep 0.1
+    if ! is_running; then
+        rm -f "$pid_file"
+        return 1
+    fi
+}
+
+stop() {
+    if is_running; then
+        kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+}
+
+case ${1:-status} in
+    start) start ;;
+    stop) stop ;;
+    toggle)
+        if is_running; then stop; else start; fi
+        ;;
+    status)
+        if is_running; then printf '%s\n' active; else printf '%s\n' inactive; fi
+        ;;
+    *)
+        printf 'usage: %s {start|stop|toggle|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

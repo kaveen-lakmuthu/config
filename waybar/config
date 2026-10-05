@@ -18,37 +18,18 @@
   ],
 
   "modules-right": [
-    "group/status",
-    "group/session",
-    "group/history",
+    "group/essentials",
+    "custom/window-controls",
     "tray",
-    "custom/power"
+    "custom/system-menu"
   ],
 
-  "group/status": {
+  "group/essentials": {
     "orientation": "horizontal",
     "modules": [
-      "network",
       "pulseaudio",
-      "custom/microphone",
-      "backlight",
-      "battery"
-    ]
-  },
-
-  "group/session": {
-    "orientation": "horizontal",
-    "modules": [
+      "battery",
       "custom/keyboard-layout",
-      "custom/night-light",
-      "idle_inhibitor"
-    ]
-  },
-
-  "group/history": {
-    "orientation": "horizontal",
-    "modules": [
-      "custom/notifications",
       "custom/clipboard"
     ]
   },
@@ -69,25 +50,10 @@
     "interval": 1
   },
 
-  "network": {
-    "format-wifi": "Wi-Fi {essid}",
-    "format-ethernet": "Ethernet",
-    "format-disconnected": "Offline",
-    "tooltip": true,
-    "on-click": "nm-connection-editor"
-  },
-
   "custom/clipboard": {
     "format": "CLIP",
     "tooltip-format": "Clipboard history",
     "on-click": "$HOME/.config/waybar/scripts/desktop-panel.py clipboard"
-  },
-
-  "custom/notifications": {
-    "exec": "$HOME/.config/waybar/scripts/desktop-panel.py notifications --status",
-    "return-type": "json",
-    "interval": 5,
-    "on-click": "$HOME/.config/waybar/scripts/desktop-panel.py notifications"
   },
 
   "custom/keyboard-layout": {
@@ -97,21 +63,11 @@
     "on-click": "$HOME/.config/waybar/scripts/keyboard-layout toggle"
   },
 
-  "custom/night-light": {
-    "exec": "$HOME/.config/waybar/scripts/night-light status",
+  "custom/window-controls": {
+    "exec": "$HOME/.config/waybar/scripts/window-controls.py --status",
     "return-type": "json",
-    "interval": 2,
-    "on-click": "$HOME/.config/waybar/scripts/night-light toggle"
-  },
-
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "<s>IDLE</s>",
-      "deactivated": "IDLE"
-    },
-    "tooltip-format-activated": "Idle inhibition active",
-    "tooltip-format-deactivated": "Idle inhibition inactive"
+    "interval": 1,
+    "on-click": "$HOME/.config/waybar/scripts/window-controls.py"
   },
 
   "pulseaudio": {
@@ -121,26 +77,6 @@
     "on-click-right": "pavucontrol",
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-  },
-
-  "custom/microphone": {
-    "exec": "$HOME/.config/waybar/scripts/microphone-status",
-    "return-type": "json",
-    "interval": 1,
-    "tooltip": true,
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "on-click-right": "pavucontrol",
-    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
-    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
-  },
-
-  "backlight": {
-    "device": "amdgpu_bl1",
-    "format": "BRT {percent}%",
-    "tooltip-format": "Click for display brightness controls",
-    "on-click": "$HOME/.config/waybar/scripts/brightness-panel.py",
-    "on-scroll-up": "$HOME/.config/river/scripts/brightness up",
-    "on-scroll-down": "$HOME/.config/river/scripts/brightness down"
   },
 
   "battery": {
@@ -163,9 +99,10 @@
     "spacing": 5
   },
 
-  "custom/power": {
-    "format": "⏻",
-    "tooltip-format": "Session and power controls",
-    "on-click": "$HOME/.config/waybar/scripts/power-menu"
+  "custom/system-menu": {
+    "exec": "$HOME/.config/waybar/scripts/quick-settings.py --status",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "$HOME/.config/waybar/scripts/quick-settings.py"
   }
 }

@@ -40,6 +40,7 @@ Install the core desktop and helper packages:
 sudo dnf install \
   river-classic waybar mako kanshi foot fuzzel \
   swaybg swayidle swaylock gtklock wlopm wlsunset \
+  tuned tuned-ppd \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr \
   polkit-kde kf6-kwallet qt6-qtwayland qt5ct qt6ct \
   network-manager-applet nm-connection-editor blueman udiskie \
@@ -139,27 +140,33 @@ fusuma --list-devices
 For external brightness, enable DDC/CI in the monitor's on-screen menu. Some
 hardware may also require access to the relevant I²C device.
 
-## Custom River tag helper
+## Custom Wayland helpers
 
 `river/bin/river-cycle-tags` is a small locally written Wayland client, not a
 downloaded utility. Waybar wheel scrolling and Fusuma gestures both call it to
 move between tags on the focused output.
 
-The compiled binary is included. To rebuild it:
+`river/bin/river-idle-inhibitor` is another small local client. It creates an
+invisible, pointer-transparent Wayland surface and attaches the standard idle
+inhibit protocol to it while `Keep awake` is enabled in quick settings. This
+lets the popup replace Waybar's otherwise inaccessible built-in idle-inhibitor
+module.
+
+The compiled binaries are included. To rebuild them:
 
 ```sh
 sudo dnf install gcc pkgconf-pkg-config wayland-devel
 ~/.config/river/native/river-cycle-tags/build
+~/.config/river/native/idle-inhibitor/build
 ```
 
-The source and the River Classic status protocol XML are under
-`river/native/river-cycle-tags/`.
+Their source and protocol XML files are under `river/native/`.
 
 ## Waybar integrations
 
-The bar includes River tags and title, clock, network/tray, volume, microphone,
-brightness, battery, notification history/DND, clipboard history, keyboard
-layout, night light, idle inhibition and a power menu.
+The compact bar keeps River tags and title, clock, volume, battery, keyboard
+layout, clipboard history and the system tray visible. `WIN` appears only in
+global floating mode. Less frequently used controls are grouped under `SYS`.
 
 The custom panels are GTK 3 layer-shell programs:
 
@@ -168,15 +175,41 @@ The custom panels are GTK 3 layer-shell programs:
   and wipe clipboard history.
 - `brightness-panel.py` shows the laptop slider and, when connected, a second
   DDC/CI slider for the external monitor.
+- `quick-settings.py` provides the `SYS` popup: layout mode, night light, idle
+  inhibition, microphone and DND toggles; brightness sliders; notification,
+  network, Bluetooth and audio shortcuts; screenshot controls; and confirmed
+  session/power actions. It also controls the standard Power Profiles D-Bus
+  API exposed by Fedora's system-wide `tuned-ppd` service.
+  It closes only when the transparent area outside it is clicked, not when the
+  pointer merely leaves it. `SYS` turns gold for DND/idle
+  inhibition and red while the microphone is active.
 - `night-light` controls `wlsunset` and exposes its state to Waybar.
 - `keyboard-layout` switches between US English and Sinhala phonetic and uses
   Right Ctrl as the Compose key. It resets to US when River starts and before
   the lock screen opens.
+- `layout-mode` toggles every connected output between rivertile and River's
+  floating fallback. `Super+Shift+Space` performs the same toggle, and Kanshi
+  reapplies the current mode after docking or undocking. Windows explicitly
+  floated by a rule or by moving/resizing them remain floating when tiled mode
+  returns; `Super+Space` toggles an individual window back into the layout.
+  Focus follows the pointer in tiled mode and changes only on a click or an
+  explicit focus command in floating mode.
+- `window-controls.py` adds a `WIN` button while global floating mode is active.
+  Its touch-friendly panel can select, move, resize, snap, close, float/tile or
+  fullscreen the focused window, or send it to another monitor and follow it.
+  The panel does not replace River's focused view, so its commands continue to
+  target the application. It and the other GTK panels use the same outside-click
+  dismissal.
 - `microphone-status` reports and toggles the PipeWire default source.
 - `power-menu` offers lock, suspend, logout, reboot and power off.
 
 Volume and microphone commands use `wpctl`, so PipeWire and WirePlumber must be
 running. Clipboard history requires both `wl-clipboard` and `cliphist`.
+
+Screenshots use the shared `river/scripts/screenshot` helper from both the
+keyboard and `SYS`: `Print` captures all outputs, `Super+Print` selects and
+saves a region, and `Super+Shift+Print` selects a region for annotation in
+Swappy. Captures are saved under `~/Pictures/Screenshots`.
 
 ## Portals and KWallet
 
