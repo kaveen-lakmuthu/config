@@ -10,4 +10,5 @@ require("config.plugins")
 
 vim.cmd.colorscheme("numenor")
 
+require("config.dashboard").setup()
 require("config.lsp")

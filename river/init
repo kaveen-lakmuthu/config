@@ -125,6 +125,8 @@ riverctl input '*Touchpad' pointer-accel 0.1
 riverctl map normal Super Return spawn foot
 riverctl map normal Super D spawn fuzzel
 riverctl map normal Super T spawn dolphin
+riverctl map normal Super E spawn \
+    'systemctl --user start emacs.service && emacsclient --create-frame --no-wait'
 # Match Brave Origin's KDE launch environment so it keeps using the existing
 # profile and KWallet-backed Secret Portal key.
 riverctl map normal Super B spawn ~/.local/bin/brave-kwallet
@@ -285,6 +287,14 @@ riverctl map normal Super+Shift Print spawn \
 
 riverctl map normal Super+Control L spawn \
     '$HOME/.config/river/scripts/lock-screen'
+
+# -----------------------------------------------------------------------------
+# Decoration rules
+# -----------------------------------------------------------------------------
+
+# Emacs disables its GTK title bar in Doom's config. Request River's
+# server-side decoration so the focused frame still gets River's gold border.
+riverctl rule-add -app-id 'emacs' ssd
 
 # -----------------------------------------------------------------------------
 # Floating rules

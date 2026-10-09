@@ -23,6 +23,7 @@ below use Fedora's `dnf`; names may differ on another distribution.
 | systemd user target | `systemd/user/river-session.target` | Marks River as the active graphical session |
 | tmux | `tmux/` | Wayland clipboard, sessions, panes, popups and matching theme |
 | Neovim | `nvim/` | IDE-like editing, LSP, formatters, Git integration and matching theme |
+| Doom Emacs | `doom/`, `desktop-entries/emacs.desktop` | Editor modules, titleless PGTK frames and daemon-backed clients |
 | GTK/KDE appearance | `gtk-3.0/`, `gtk-4.0/`, `kdeglobals` | Consistent Breeze Dark application appearance |
 
 The shared palette is dark blue-black (`#08111F`) with gold (`#D6AE4A`), sea
@@ -51,7 +52,7 @@ sudo dnf install \
   breeze-icon-theme breeze-gtk-gtk3 breeze-gtk-gtk4 \
   google-noto-sans-fonts google-noto-sans-sinhala-fonts \
   google-noto-color-emoji-fonts \
-  tmux fzf neovim ripgrep fd-find git
+  tmux fzf neovim emacs-pgtk ripgrep fd-find git
 ```
 
 Foot is configured to prefer the **Hack** font. Install a Fedora Hack font
@@ -278,6 +279,46 @@ Go formatting uses `gofmt`, and Rust formatting/checking uses `rustfmt` and
 `clippy`; install the Go and Rust toolchains when those languages are needed.
 Full custom bindings are documented in `nvim/KEYMAPS.md`. Inside Neovim,
 `Space` also opens the which-key guide.
+
+## Doom Emacs
+
+Fedora's packaged `emacs.service` keeps one PGTK Emacs daemon in the user
+session. Graphical clients use the session's native Wayland display. Fuzzel and
+application launchers use the included desktop-entry override; the `ec` and
+`et` Zsh aliases open graphical and terminal clients. The aliases ask systemd
+to start the service first, so they cannot race a fallback daemon.
+
+River's `Super+E` binding also starts the service if necessary and opens a new
+graphical Emacs client frame.
+
+Install the launcher override and enable the packaged user service with:
+
+```sh
+install -Dm0644 ~/.config/desktop-entries/emacs.desktop \
+  ~/.local/share/applications/emacs.desktop
+systemctl --user enable --now emacs.service
+```
+
+No custom Emacs service or service override is required.
+
+Keep `doom/snippets/` present for personal YASnippet templates. Doom supplies
+its own language snippets; this directory is where local additions belong:
+
+```sh
+mkdir -p ~/.config/doom/snippets
+```
+
+Python completion and diagnostics use `basedpyright`; JavaScript and
+TypeScript use `typescript-language-server`. Install them into the existing
+user-local executable path with:
+
+```sh
+pipx install basedpyright
+npm install --global --prefix ~/.local typescript@5 typescript-language-server
+```
+
+Run `doom sync` after changing `doom/init.el`. Doom's Tree-sitter grammars are
+installed on demand when a supported language is first opened.
 
 ## Quick validation
 

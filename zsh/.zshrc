@@ -11,6 +11,7 @@ export PATH=$PATH:/opt/nvim-linux-x86_64/bin
 export PATH=$PATH:$HOME/Android/Sdk/platform-tools
 export PATH=$PATH:$HOME/Android/Sdk/emulator
 export PATH=$HOME/Documents/Projects/osdev/cross/bin:$PATH
+export PATH=$PATH:$HOME/go/bin
 
 # Environment variables
 export EDITOR='nvim'
@@ -80,8 +81,8 @@ alias edit='code'
 alias cat='bat'
 alias ls='eza --icons=auto'
 alias grep='rg'
-alias ec='emacsclient -c -n'
-alias et='emacsclient -t'
+alias ec='systemctl --user start emacs.service && emacsclient --create-frame --no-wait'
+alias et='systemctl --user start emacs.service && emacsclient --tty'
 alias ta='tmux new-session -A -s main'
 
 # Prompt

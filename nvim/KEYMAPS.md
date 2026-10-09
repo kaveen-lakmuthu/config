@@ -3,6 +3,25 @@
 The leader key is `Space`. Pause briefly after pressing it to open the
 which-key guide.
 
+## Home screen
+
+The home screen appears only when Neovim starts without a file. Number keys
+open the listed recent files directly.
+
+| Key | Action |
+|---|---|
+| `1`–`5` | Open the corresponding recent file |
+| `f` | Find files |
+| `g` | Search text in the current project |
+| `r` | Show all recent files |
+| `e` | Open the file explorer |
+| `n` | Create an empty buffer |
+| `c` | Edit this Neovim configuration |
+| `m` | Open Mason tool management |
+| `k` | Search all key maps |
+| `h` | Search help |
+| `q` | Quit |
+
 ## Everyday editing
 
 | Key | Action |
@@ -81,4 +100,3 @@ which-key guide.
 | `:TSInstall <language>` | Install a Treesitter parser |
 | `:PackUpdate` | Review plugin updates |
 | `:checkhealth` | Diagnose the setup |
-
