@@ -1,8 +1,6 @@
-font=Noto Sans 10
+include=~/.config/river-control-center/generated/mako-theme.conf
 
-background-color=#101C2C
-text-color=#EEF2F6
-border-color=#D6AE4A
+font=Noto Sans 10
 
 border-size=2
 border-radius=8
@@ -12,7 +10,6 @@ margin=10
 
 width=360
 default-timeout=5000
-max-history=25
 
 anchor=top-right
 

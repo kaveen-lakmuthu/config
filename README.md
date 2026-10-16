@@ -24,6 +24,7 @@ below use Fedora's `dnf`; names may differ on another distribution.
 | tmux | `tmux/` | Wayland clipboard, sessions, panes, popups and matching theme |
 | Neovim | `nvim/` | IDE-like editing, LSP, formatters, Git integration and matching theme |
 | Doom Emacs | `doom/`, `desktop-entries/emacs.desktop` | Editor modules, titleless PGTK frames and daemon-backed clients |
+| River Control Center data | `river-control-center/` | Settings, backups and generated desktop integration fragments |
 | GTK/KDE appearance | `gtk-3.0/`, `gtk-4.0/`, `kdeglobals` | Consistent Breeze Dark application appearance |
 
 The shared palette is dark blue-black (`#08111F`) with gold (`#D6AE4A`), sea
@@ -53,6 +54,16 @@ sudo dnf install \
   google-noto-sans-fonts google-noto-sans-sinhala-fonts \
   google-noto-color-emoji-fonts \
   tmux fzf neovim emacs-pgtk ripgrep fd-find git
+```
+
+To build the optional River Control Center, install the Qt/Kirigami development
+tools as well:
+
+```sh
+sudo dnf install \
+  gcc-c++ cmake ninja-build \
+  qt6-qtbase-devel qt6-qtdeclarative-devel \
+  kf6-kirigami-devel kf6-qqc2-desktop-style
 ```
 
 Foot is configured to prefer the **Hack** font. Install a Fedora Hack font
@@ -163,11 +174,49 @@ sudo dnf install gcc pkgconf-pkg-config wayland-devel
 
 Their source and protocol XML files are under `river/native/`.
 
+## River Control Center
+
+The River Control Center source is maintained separately in
+`~/Projects/river-control-center`. This dotfiles repository contains only its
+runtime data under `river-control-center/`: the active settings, ten rotating
+backups and generated fragments consumed by River, Waybar, Mako, Foot, Fuzzel
+and the custom GTK panels.
+
+The Qt 6/QML/Kirigami application manages the shared semantic palette, River
+border width and rivertile spacing, Waybar dimensions and module visibility,
+clock and battery settings, notification retention and popup geometry.
+
+Build and install it for the current user with:
+
+```sh
+~/Projects/river-control-center/build.sh
+```
+
+This installs the binary under `~/.local/bin` and its launcher under
+`~/.local/share/applications`. Run `river-control-center` directly or find
+**River Control Center** in Fuzzel. Use this command for a non-graphical
+configuration check:
+
+```sh
+river-control-center --check
+```
+
+After restoring the repository, `river-control-center --regenerate` recreates
+all generated theme fragments from `settings.json` without changing the live
+session.
+
+River borders, Waybar, Mako and the solid background update live when Apply is
+pressed inside River. Foot and Fuzzel read the new theme when next launched.
+Rivertile padding is applied when River next starts because River Classic does
+not expose runtime padding commands.
+
 ## Waybar integrations
 
 The compact bar keeps River tags and title, clock, volume, battery, keyboard
 layout, clipboard history and the system tray visible. `WIN` appears only in
 global floating mode. Less frequently used controls are grouped under `SYS`.
+Its dimensions and visible modules are generated from the **Bar & Panels** page
+in River Control Center; the command definitions remain in `waybar/config`.
 
 The custom panels are GTK 3 layer-shell programs:
 

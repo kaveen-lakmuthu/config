@@ -1,38 +1,7 @@
 {
+  "include": "../river-control-center/generated/waybar-settings.json",
   "layer": "top",
   "position": "top",
-  "height": 26,
-  "spacing": 0,
-  "margin-top": 0,
-  "margin-right": 0,
-  "margin-bottom": 0,
-  "margin-left": 0,
-
-  "modules-left": [
-    "river/tags",
-    "river/window"
-  ],
-
-  "modules-center": [
-    "clock"
-  ],
-
-  "modules-right": [
-    "group/essentials",
-    "custom/window-controls",
-    "tray",
-    "custom/system-menu"
-  ],
-
-  "group/essentials": {
-    "orientation": "horizontal",
-    "modules": [
-      "pulseaudio",
-      "battery",
-      "custom/keyboard-layout",
-      "custom/clipboard"
-    ]
-  },
 
   "river/tags": {
     "num-tags": 9,
@@ -43,11 +12,6 @@
 
   "river/window": {
     "max-length": 50
-  },
-
-  "clock": {
-    "format": "{:%a %d/%m/%Y (%b)  %H:%M:%S}",
-    "interval": 1
   },
 
   "custom/clipboard": {
@@ -77,26 +41,6 @@
     "on-click-right": "pavucontrol",
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-  },
-
-  "battery": {
-    "interval": 30,
-    "format": "BAT {capacity}%",
-    "format-charging": "BAT {capacity}% +",
-    "format-full": "BAT 100%",
-    "states": {
-      "warning": 25,
-      "critical": 12
-    },
-    "events": {
-      "on-discharging-warning": "sh -c 'level=$(cat /sys/class/power_supply/BAT0/capacity); notify-send -a Battery -u normal \"Low battery\" \"Battery is at ${level}%.\"'",
-      "on-discharging-critical": "sh -c 'level=$(cat /sys/class/power_supply/BAT0/capacity); notify-send -a Battery -u critical \"Critical battery\" \"Battery is at ${level}%. Connect a charger.\"'"
-    }
-  },
-
-  "tray": {
-    "icon-size": 14,
-    "spacing": 5
   },
 
   "custom/system-menu": {

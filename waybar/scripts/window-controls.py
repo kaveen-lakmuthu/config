@@ -45,7 +45,7 @@ gi.require_version("Gdk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
 from gi.repository import Gdk, Gtk
 
-from layer_popup import configure_layer_popup
+from layer_popup import configure_layer_popup, panel_setting
 
 
 def river(*arguments):
@@ -69,7 +69,7 @@ class WindowControls(Gtk.Window):
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=9)
-        outer.set_border_width(16)
+        outer.set_border_width(panel_setting("padding", 16))
         card.pack_start(outer, True, True, 0)
         configure_layer_popup(
             self,

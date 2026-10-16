@@ -18,6 +18,36 @@ export QT_STYLE_OVERRIDE=Breeze
 export GTK_THEME=Breeze-Dark
 export MOZ_ENABLE_WAYLAND=1
 
+# Graphical launchers do not read .zshrc. Make user-installed applications
+# available to Fuzzel and to processes activated through D-Bus/systemd.
+case ":$PATH:" in
+    *":$HOME/.local/bin:"*) ;;
+    *) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+export PATH
+
+# Values written by River Control Center. Defaults keep the session usable if
+# the generated file is missing or has not been created yet.
+RCC_BASE='#08111F'
+RCC_SURFACE='#101C2C'
+RCC_SECONDARY_SURFACE='#17283D'
+RCC_TEXT='#EEF2F6'
+RCC_MUTED_TEXT='#A8B4C3'
+RCC_ACCENT='#D6AE4A'
+RCC_SECONDARY_ACCENT='#4C83C3'
+RCC_HIGHLIGHT='#79AFC7'
+RCC_URGENT='#B94747'
+RCC_SUCCESS='#5F9C83'
+RCC_BORDER_UNFOCUSED='#27374A'
+RCC_BORDER_WIDTH=2
+RCC_VIEW_PADDING=0
+RCC_OUTER_PADDING=0
+
+RCC_THEME="$HOME/.config/river-control-center/generated/river-theme.sh"
+if [ -r "$RCC_THEME" ]; then
+    . "$RCC_THEME"
+fi
+
 dbus-update-activation-environment --systemd \
     WAYLAND_DISPLAY \
     XDG_CURRENT_DESKTOP \
@@ -26,7 +56,8 @@ dbus-update-activation-environment --systemd \
     QT_QPA_PLATFORM \
     QT_QPA_PLATFORMTHEME \
     QT_STYLE_OVERRIDE \
-    GTK_THEME
+    GTK_THEME \
+    PATH
 
 systemctl --user import-environment \
     WAYLAND_DISPLAY \
@@ -36,7 +67,8 @@ systemctl --user import-environment \
     QT_QPA_PLATFORM \
     QT_QPA_PLATFORMTHEME \
     QT_STYLE_OVERRIDE \
-    GTK_THEME
+    GTK_THEME \
+    PATH
 
 # Tell systemd that River is the active graphical session. This target pulls
 # in graphical-session.target; do not start graphical-session.target directly.
@@ -55,7 +87,7 @@ kanshi &
 # Warm the display after sunset. The Waybar control can toggle this process.
 $HOME/.config/waybar/scripts/night-light start
 
-swaybg -c '#08111F' &
+swaybg -c "$RCC_BASE" &
 mako &
 waybar &
 nm-applet --indicator &
@@ -80,10 +112,10 @@ swayidle -w \
 # Appearance
 # -----------------------------------------------------------------------------
 
-riverctl background-color 0x08111F
-riverctl border-color-focused 0xD6AE4A
-riverctl border-color-unfocused 0x27374A
-riverctl border-width 2
+riverctl background-color "0x${RCC_BASE#\#}"
+riverctl border-color-focused "0x${RCC_ACCENT#\#}"
+riverctl border-color-unfocused "0x${RCC_BORDER_UNFOCUSED#\#}"
+riverctl border-width "$RCC_BORDER_WIDTH"
 
 # Keep the existing master in place; append new views to the stack.
 riverctl default-attach-mode bottom
@@ -347,5 +379,5 @@ riverctl default-layout rivertile
 # Tile edge-to-edge; River's borders separate adjacent views without
 # wasting pixels around the outside of the usable area.
 rivertile \
-    -view-padding 0 \
-    -outer-padding 0 &
+    -view-padding "$RCC_VIEW_PADDING" \
+    -outer-padding "$RCC_OUTER_PADDING" &

@@ -1,0 +1,51 @@
+{
+    "appearance": {
+        "accent": "#D6AE4A",
+        "base": "#08111F",
+        "borderUnfocused": "#27374A",
+        "highlight": "#79AFC7",
+        "mutedText": "#A8B4C3",
+        "secondaryAccent": "#4C83C3",
+        "secondarySurface": "#17283D",
+        "success": "#5F9C83",
+        "surface": "#101C2C",
+        "text": "#EEF2F6",
+        "urgent": "#B94747"
+    },
+    "bar": {
+        "batteryCritical": 12,
+        "batteryWarning": 25,
+        "clockFormat": "{:%a %d/%m/%Y (%b)  %H:%M:%S}",
+        "fontSize": 11,
+        "height": 26,
+        "modulePadding": 7,
+        "modules": {
+            "battery": true,
+            "clipboard": true,
+            "clock": true,
+            "keyboardLayout": true,
+            "systemMenu": true,
+            "tags": true,
+            "tray": true,
+            "volume": true,
+            "windowControls": true,
+            "windowTitle": true
+        },
+        "tagPadding": 6
+    },
+    "panels": {
+        "clipboardHistoryLimit": 40,
+        "height": 420,
+        "notificationHistoryLimit": 25,
+        "padding": 16,
+        "rightMargin": 6,
+        "topMargin": 4,
+        "width": 430
+    },
+    "river": {
+        "borderWidth": 2,
+        "outerPadding": 0,
+        "viewPadding": 0
+    },
+    "schemaVersion": 2
+}

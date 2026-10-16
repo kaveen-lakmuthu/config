@@ -1,13 +1,15 @@
+@import url("../river-control-center/generated/waybar-colors.css");
+@import url("../river-control-center/generated/waybar-layout.css");
+
 * {
     font-family: "Noto Sans", sans-serif;
-    font-size: 11px;
     border: none;
     min-height: 0;
 }
 
 window#waybar {
-    background: #101C2C;
-    color: #EEF2F6;
+    background: @rcc_surface;
+    color: @rcc_text;
 }
 
 #tags,
@@ -15,7 +17,7 @@ window#waybar {
 #essentials,
 #tray,
 #custom-system-menu {
-    background: #101C2C;
+    background: @rcc_surface;
     border-radius: 0;
 }
 
@@ -24,42 +26,39 @@ window#waybar {
 }
 
 #tags button {
-    padding: 0 6px;
     background: transparent;
-    color: #7D8A9B;
+    color: @rcc_subtle_text;
     border-radius: 0;
 }
 
 #tags button.occupied {
-    color: #C9D3DE;
+    color: @rcc_occupied;
 }
 
 #tags button.focused {
-    background: #D6AE4A;
-    color: #08111F;
+    background: @rcc_accent;
+    color: @rcc_base;
 }
 
 #tags button.urgent {
-    background: #B94747;
-    color: #FFFFFF;
+    background: @rcc_urgent;
+    color: @rcc_text;
 }
 
 #window {
-    padding: 0 8px;
-    color: #A8B4C3;
+    color: @rcc_muted_text;
 }
 
 #clock {
     margin: 0;
-    padding: 0 8px;
-    color: #EEF2F6;
+    color: @rcc_text;
 }
 
 #essentials,
 #custom-window-controls,
 #tray {
     margin: 0;
-    border-left: 1px solid #17283D;
+    border-left: 1px solid @rcc_secondary_surface;
 }
 
 #custom-clipboard,
@@ -67,36 +66,33 @@ window#waybar {
 #custom-window-controls,
 #pulseaudio,
 #battery {
-    padding: 0 7px;
-    color: #EEF2F6;
+    color: @rcc_text;
 }
 
 #tray {
-    padding: 0 6px;
 }
 
 #tray widget image {
-    color: #EEF2F6;
+    color: @rcc_text;
     -gtk-icon-style: symbolic;
 }
 
 #custom-system-menu {
     margin: 0;
-    padding: 0 8px;
-    border-left: 1px solid #17283D;
-    color: #EEF2F6;
+    border-left: 1px solid @rcc_secondary_surface;
+    color: @rcc_text;
 }
 
 #custom-system-menu.attention {
-    color: #D6AE4A;
+    color: @rcc_accent;
 }
 
 #custom-system-menu.alert {
-    color: #B94747;
+    color: @rcc_urgent;
 }
 
 #custom-window-controls.active {
-    color: #D6AE4A;
+    color: @rcc_accent;
 }
 
 #custom-window-controls.hidden {
@@ -107,18 +103,18 @@ window#waybar {
 }
 
 #pulseaudio.muted {
-    color: #7D8A9B;
+    color: @rcc_subtle_text;
 }
 
 #battery.charging,
 #battery.plugged {
-    color: #5F9C83;
+    color: @rcc_success;
 }
 
 #battery.warning {
-    color: #D6AE4A;
+    color: @rcc_accent;
 }
 
 #battery.critical {
-    color: #B94747;
+    color: @rcc_urgent;
 }

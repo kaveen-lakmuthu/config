@@ -1,11 +1,45 @@
 """Shared click-outside behavior for GTK layer-shell panels."""
 
+import json
+import os
+
 import gi
 
 gi.require_version("Gdk", "3.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
 from gi.repository import Gdk, Gtk, GtkLayerShell
+
+
+SETTINGS_PATH = os.path.expanduser(
+    "~/.config/river-control-center/generated/panel-settings.json"
+)
+
+
+def panel_settings():
+    """Return generated panel settings, falling back safely if unavailable."""
+
+    defaults = {
+        "clipboardHistoryLimit": 40,
+        "notificationHistoryLimit": 25,
+        "width": 430,
+        "height": 420,
+        "padding": 16,
+        "topMargin": 4,
+        "rightMargin": 6,
+    }
+    try:
+        with open(SETTINGS_PATH, encoding="utf-8") as settings_file:
+            loaded = json.load(settings_file)
+    except (OSError, json.JSONDecodeError):
+        return defaults
+    if not isinstance(loaded, dict):
+        return defaults
+    return {**defaults, **loaded}
+
+
+def panel_setting(name, default=None):
+    return panel_settings().get(name, default)
 
 
 def _is_inside(widget, content):
@@ -26,6 +60,10 @@ def configure_layer_popup(
     preserve_view_focus=False,
 ):
     """Place content at top-right over a transparent click-dismiss backdrop."""
+
+    settings = panel_settings()
+    top = settings.get("topMargin", top)
+    right = settings.get("rightMargin", right)
 
     screen = window.get_screen()
     visual = screen.get_rgba_visual() if screen is not None else None

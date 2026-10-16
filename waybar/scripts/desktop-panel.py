@@ -15,7 +15,7 @@ gi.require_version("Gdk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
 from gi.repository import Gdk, GLib, Gtk, Pango
 
-from layer_popup import configure_layer_popup
+from layer_popup import configure_layer_popup, panel_setting
 
 
 def run(command, *, input_data=None):
@@ -86,7 +86,7 @@ class Panel(Gtk.Window):
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        self.outer.set_border_width(16)
+        self.outer.set_border_width(panel_setting("padding", 16))
         card.pack_start(self.outer, True, True, 0)
         configure_layer_popup(self, card, "desktop-panel", top=4, right=6)
 
@@ -104,7 +104,9 @@ class Panel(Gtk.Window):
 
         self.scroll = Gtk.ScrolledWindow()
         self.scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.scroll.set_size_request(430, 420)
+        self.scroll.set_size_request(
+            panel_setting("width", 430), panel_setting("height", 420)
+        )
         self.outer.pack_start(self.scroll, True, True, 0)
 
     def set_content(self, widget):
@@ -173,7 +175,7 @@ class ClipboardPanel(Panel):
             return
 
         content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        for entry in entries[:40]:
+        for entry in entries[: panel_setting("clipboardHistoryLimit", 40)]:
             preview = entry.split("\t", 1)[-1].strip() or "Empty item"
             button = Gtk.Button()
             button.set_relief(Gtk.ReliefStyle.NONE)
@@ -236,7 +238,9 @@ class NotificationPanel(Panel):
             return
 
         content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        for source, item in notifications[:40]:
+        for source, item in notifications[
+            : panel_setting("notificationHistoryLimit", 25)
+        ]:
             card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
             card.get_style_context().add_class("notification-card")
             card.set_border_width(8)
