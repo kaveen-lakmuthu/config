@@ -71,7 +71,7 @@ class BrightnessPanel(Gtk.Window):
 
         self.pending = {}
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=panel_setting("spacing", 12))
         outer.set_border_width(panel_setting("padding", 16))
         card.pack_start(outer, True, True, 0)
         configure_layer_popup(self, card, "brightness-panel", top=4, right=10)

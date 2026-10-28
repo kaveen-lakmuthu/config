@@ -2,7 +2,6 @@
 @import url("../river-control-center/generated/waybar-layout.css");
 
 * {
-    font-family: "Noto Sans", sans-serif;
     border: none;
     min-height: 0;
 }
@@ -18,7 +17,6 @@ window#waybar {
 #tray,
 #custom-system-menu {
     background: @rcc_surface;
-    border-radius: 0;
 }
 
 #tags {
@@ -28,7 +26,6 @@ window#waybar {
 #tags button {
     background: transparent;
     color: @rcc_subtle_text;
-    border-radius: 0;
 }
 
 #tags button.occupied {

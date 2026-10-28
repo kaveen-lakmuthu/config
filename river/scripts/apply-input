@@ -1,0 +1,44 @@
+#!/bin/sh
+
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/input.conf"
+
+RCC_TOUCHPAD_TAP=true
+RCC_TOUCHPAD_NATURAL_SCROLL=true
+RCC_TOUCHPAD_DISABLE_WHILE_TYPING=true
+RCC_TOUCHPAD_POINTER_ACCEL=0.10
+RCC_TOUCHPAD_CLICK_METHOD='clickfinger'
+RCC_KEYBOARD_REPEAT_RATE=50
+RCC_KEYBOARD_REPEAT_DELAY=300
+
+if [ -r "$config_file" ]; then
+    . "$config_file"
+fi
+
+enabled_value() {
+    if [ "$1" = true ]; then
+        printf 'enabled\n'
+    else
+        printf 'disabled\n'
+    fi
+}
+
+status=0
+riverctl set-repeat "$RCC_KEYBOARD_REPEAT_RATE" \
+    "$RCC_KEYBOARD_REPEAT_DELAY" || status=1
+riverctl input '*Touchpad' tap \
+    "$(enabled_value "$RCC_TOUCHPAD_TAP")" || status=1
+riverctl input '*Touchpad' tap-button-map left-right-middle || status=1
+riverctl input '*Touchpad' click-method \
+    "$RCC_TOUCHPAD_CLICK_METHOD" || status=1
+riverctl input '*Touchpad' scroll-method two-finger || status=1
+riverctl input '*Touchpad' drag enabled || status=1
+riverctl input '*Touchpad' drag-lock disabled || status=1
+riverctl input '*Touchpad' disable-while-typing \
+    "$(enabled_value "$RCC_TOUCHPAD_DISABLE_WHILE_TYPING")" || status=1
+riverctl input '*Touchpad' natural-scroll \
+    "$(enabled_value "$RCC_TOUCHPAD_NATURAL_SCROLL")" || status=1
+riverctl input '*Touchpad' pointer-accel \
+    "$RCC_TOUCHPAD_POINTER_ACCEL" || status=1
+
+"${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/keyboard-layout" apply || status=1
+exit "$status"

@@ -4,17 +4,24 @@ set -u
 runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
 state_file="$runtime_dir/river-global-layout-mode"
 lock_file="$runtime_dir/river-global-layout-mode.lock"
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/window-management.conf"
+
+RCC_FOCUS_POLICY='mode-aware'
+RCC_DEFAULT_LAYOUT_MODE='tiled'
+if [ -r "$config_file" ]; then
+    . "$config_file"
+fi
 
 current_mode() {
     if [ -r "$state_file" ]; then
         mode=$(sed -n '1p' "$state_file")
     else
-        mode='tiled'
+        mode=$RCC_DEFAULT_LAYOUT_MODE
     fi
 
     case "$mode" in
         tiled|floating) printf '%s\n' "$mode" ;;
-        *)              printf '%s\n' 'tiled' ;;
+        *)              printf '%s\n' "$RCC_DEFAULT_LAYOUT_MODE" ;;
     esac
 }
 
@@ -28,14 +35,22 @@ apply_mode() {
     case "$mode" in
         tiled)
             namespace='rivertile'
-            focus_policy='normal'
             ;;
         floating)
             namespace='floating'
-            focus_policy='disabled'
             ;;
         *) return 2 ;;
     esac
+
+    if [ "$RCC_FOCUS_POLICY" = 'mode-aware' ]; then
+        if [ "$mode" = 'tiled' ]; then
+            focus_policy='normal'
+        else
+            focus_policy='disabled'
+        fi
+    else
+        focus_policy=$RCC_FOCUS_POLICY
+    fi
 
     count=$(connected_output_count)
     [ "$count" -gt 0 ] || return 1

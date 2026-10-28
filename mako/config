@@ -1,9 +1,7 @@
 include=~/.config/river-control-center/generated/mako-theme.conf
 
-font=Noto Sans 10
 
 border-size=2
-border-radius=8
 
 padding=12
 margin=10

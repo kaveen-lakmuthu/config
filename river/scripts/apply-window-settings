@@ -1,0 +1,54 @@
+#!/bin/sh
+
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/window-management.conf"
+layout_helper="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/layout-mode"
+
+RCC_MAIN_RATIO=0.60
+RCC_MAIN_COUNT=1
+RCC_MAIN_POSITION='left'
+RCC_ATTACH_MODE='bottom'
+RCC_FOCUS_POLICY='mode-aware'
+RCC_DEFAULT_LAYOUT_MODE='tiled'
+RCC_TAG_COUNT=9
+
+if [ -r "$config_file" ]; then
+    . "$config_file"
+fi
+
+status=0
+riverctl default-attach-mode "$RCC_ATTACH_MODE" || status=1
+"$layout_helper" set "$RCC_DEFAULT_LAYOUT_MODE" || status=1
+
+# Rebuild the numeric tag bindings so decreasing the count also removes stale
+# shortcuts. Waybar and Fusuma read the same generated count.
+for tag_number in $(seq 1 9); do
+    riverctl unmap normal Super "$tag_number" 2>/dev/null || true
+    riverctl unmap normal Super+Shift "$tag_number" 2>/dev/null || true
+    riverctl unmap normal Super+Control "$tag_number" 2>/dev/null || true
+    riverctl unmap normal Super+Shift+Control "$tag_number" 2>/dev/null || true
+done
+for tag_number in $(seq 1 "$RCC_TAG_COUNT"); do
+    tag_mask=$((1 << (tag_number - 1)))
+    riverctl map normal Super "$tag_number" set-focused-tags "$tag_mask" || status=1
+    riverctl map normal Super+Shift "$tag_number" set-view-tags "$tag_mask" || status=1
+    riverctl map normal Super+Control "$tag_number" toggle-focused-tags "$tag_mask" || status=1
+    riverctl map normal Super+Shift+Control "$tag_number" toggle-view-tags "$tag_mask" || status=1
+done
+all_tags=$(((1 << RCC_TAG_COUNT) - 1))
+riverctl map normal Super 0 set-focused-tags "$all_tags" || status=1
+riverctl map normal Super+Shift 0 set-view-tags "$all_tags" || status=1
+
+count=$(wlopm 2>/dev/null | awk 'NF >= 2 { count++ } END { print count + 0 }')
+[ "$count" -gt 0 ] || exit 1
+
+# Walk every connected output, then return focus to the output where it began.
+index=0
+while [ "$index" -lt "$count" ]; do
+    riverctl send-layout-cmd rivertile "main-ratio $RCC_MAIN_RATIO" || status=1
+    riverctl send-layout-cmd rivertile "main-count $RCC_MAIN_COUNT" || status=1
+    riverctl send-layout-cmd rivertile "main-location $RCC_MAIN_POSITION" || status=1
+    riverctl focus-output next || status=1
+    index=$((index + 1))
+done
+
+exit "$status"

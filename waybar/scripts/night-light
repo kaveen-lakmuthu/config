@@ -1,11 +1,17 @@
 #!/bin/sh
 
-# Manual sunrise/sunset keeps this predictable without a location service.
-# Adjust these values if your preferred schedule changes.
-sunrise='06:00'
-sunset='18:00'
+# Manual start/stop times keep this predictable without a location service.
+night_stop='06:00'
+night_start='18:00'
 temperature='4000'
 transition='1800'
+
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/power-idle.conf"
+if [ -r "$config_file" ]; then
+    . "$config_file"
+    night_start=${RCC_NIGHT_LIGHT_START:-$night_start}
+    night_stop=${RCC_NIGHT_LIGHT_STOP:-$night_stop}
+fi
 
 runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
 pid_file="$runtime_dir/river-wlsunset.pid"
@@ -23,8 +29,8 @@ is_running() {
 start() {
     is_running && return 0
     wlsunset \
-        -S "$sunrise" \
-        -s "$sunset" \
+        -S "$night_stop" \
+        -s "$night_start" \
         -d "$transition" \
         -t "$temperature" \
         -T 6500 \
@@ -57,9 +63,15 @@ case ${1:-status} in
             start
         fi
         ;;
+    reload)
+        if is_running; then
+            stop
+            start
+        fi
+        ;;
     status) status ;;
     *)
-        printf 'usage: %s {start|stop|toggle|status}\n' "$0" >&2
+        printf 'usage: %s {start|stop|toggle|reload|status}\n' "$0" >&2
         exit 2
         ;;
 esac

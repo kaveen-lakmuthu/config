@@ -1,0 +1,97 @@
+#!/bin/sh
+set -eu
+
+# Start and stop only the swayidle instance owned by this River session.
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+pid_file="$runtime_dir/river-swayidle.pid"
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/power-idle.conf"
+
+RCC_LOCK_TIMEOUT=600
+RCC_DISPLAY_OFF_TIMEOUT=900
+RCC_BATTERY_SUSPEND_TIMEOUT=1800
+RCC_AC_SUSPEND_TIMEOUT=3600
+RCC_LOCK_ON_IDLE=true
+RCC_DISPLAY_OFF_ON_IDLE=true
+RCC_SUSPEND_ON_BATTERY=true
+RCC_SUSPEND_ON_AC=true
+RCC_LOCK_BEFORE_SUSPEND=true
+
+if [ -r "$config_file" ]; then
+    . "$config_file"
+fi
+
+is_running() {
+    [ -r "$pid_file" ] || return 1
+    read -r pid expected_start < "$pid_file" || return 1
+    case "$pid" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    case "$expected_start" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    current_start=$(awk '{print $22}' "/proc/$pid/stat" 2>/dev/null) || return 1
+    [ "$current_start" = "$expected_start" ] &&
+        kill -0 "$pid" 2>/dev/null &&
+        [ "$(cat "/proc/$pid/comm" 2>/dev/null)" = 'swayidle' ]
+}
+
+stop() {
+    if is_running; then
+        kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+}
+
+start() {
+    is_running && return 0
+
+    set -- -w
+    if [ "$RCC_LOCK_ON_IDLE" = true ]; then
+        set -- "$@" timeout "$RCC_LOCK_TIMEOUT" \
+            "$HOME/.config/river/scripts/lock-screen"
+    fi
+    if [ "$RCC_DISPLAY_OFF_ON_IDLE" = true ]; then
+        set -- "$@" timeout "$RCC_DISPLAY_OFF_TIMEOUT" \
+            "wlopm --off '*'" resume "wlopm --on '*'"
+    fi
+    if [ "$RCC_SUSPEND_ON_BATTERY" = true ]; then
+        set -- "$@" timeout "$RCC_BATTERY_SUSPEND_TIMEOUT" \
+            "$HOME/.config/river/scripts/idle-suspend battery"
+    fi
+    if [ "$RCC_SUSPEND_ON_AC" = true ]; then
+        set -- "$@" timeout "$RCC_AC_SUSPEND_TIMEOUT" \
+            "$HOME/.config/river/scripts/idle-suspend ac"
+    fi
+    if [ "$RCC_LOCK_BEFORE_SUSPEND" = true ]; then
+        set -- "$@" before-sleep "$HOME/.config/river/scripts/lock-screen"
+    fi
+
+    swayidle "$@" >/dev/null 2>&1 &
+    pid=$!
+    process_start=$(awk '{print $22}' "/proc/$pid/stat" 2>/dev/null) || {
+        kill "$pid" 2>/dev/null || true
+        return 1
+    }
+    printf '%s %s\n' "$pid" "$process_start" > "$pid_file"
+}
+
+case ${1:-start} in
+    start) start ;;
+    stop) stop ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if is_running; then
+            printf 'running (%s)\n' "$pid"
+        else
+            printf 'stopped\n'
+            exit 1
+        fi
+        ;;
+    *)
+        printf 'usage: %s {start|stop|restart|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

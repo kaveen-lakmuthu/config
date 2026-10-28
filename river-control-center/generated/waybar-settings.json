@@ -45,6 +45,12 @@
         "custom/system-menu"
     ],
     "reload_style_on_change": true,
+    "river/tags": {
+        "num-tags": 9,
+        "on-scroll-down": "~/.config/river/bin/river-cycle-tags next 9",
+        "on-scroll-up": "~/.config/river/bin/river-cycle-tags previous 9",
+        "smooth-scrolling-threshold": 1
+    },
     "spacing": 0,
     "tray": {
         "icon-size": 14,

@@ -1,0 +1,95 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+
+    "logo": {
+        "type": "file",
+        "source": "~/.config/fastfetch/logo.txt",
+        "color": {
+            "1": "38;2;238;242;246"
+        },
+        "padding": {
+            "top": 1,
+            "right": 3
+        }
+    },
+
+    "display": {
+        "separator": "",
+        "color": {
+            "keys": "38;2;121;175;199",
+            "output": "38;2;238;242;246"
+        },
+        "key": {
+            "width": 10
+        },
+        "constants": [
+            "────────────────────────────────"
+        ],
+        "percent": {
+            "type": 9,
+            "color": {
+                "green": "38;2;95;156;131",
+                "yellow": "38;2;214;174;74",
+                "red": "38;2;185;71;71"
+            }
+        }
+    },
+
+    "modules": [
+        {
+            "type": "custom",
+            "format": "{#38;2;238;242;246}Tar-Minyatur{#38;2;168;180;195}@{#38;2;121;175;199}Arandor"
+        },
+        {
+            "type": "custom",
+            "format": "{$1}",
+            "outputColor": "38;2;39;55;74"
+        },
+        {
+            "type": "custom",
+            "key": "Project",
+            "format": "Indilzar"
+        },
+        {
+            "type": "custom",
+            "key": "Vessel",
+            "format": "Rómenna"
+        },
+        {
+            "type": "custom",
+            "key": "Session",
+            "format": "River Classic · Wayland"
+        },
+        {
+            "type": "custom",
+            "key": "Layout",
+            "format": "Rivertile"
+        },
+        "break",
+        {
+            "type": "custom",
+            "key": "Terminal",
+            "format": "Foot · Zsh"
+        },
+        {
+            "type": "custom",
+            "key": "Editors",
+            "format": "Neovim · Doom Emacs"
+        },
+        {
+            "type": "custom",
+            "key": "Bar",
+            "format": "Waybar"
+        },
+        {
+            "type": "custom",
+            "key": "Launcher",
+            "format": "Fuzzel"
+        },
+        {
+            "type": "custom",
+            "key": "Notify",
+            "format": "Mako"
+        }
+    ]
+}

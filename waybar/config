@@ -3,13 +3,6 @@
   "layer": "top",
   "position": "top",
 
-  "river/tags": {
-    "num-tags": 9,
-    "on-scroll-up": "$HOME/.config/river/bin/river-cycle-tags previous 9",
-    "on-scroll-down": "$HOME/.config/river/bin/river-cycle-tags next 9",
-    "smooth-scrolling-threshold": 1.0
-  },
-
   "river/window": {
     "max-length": 50
   },

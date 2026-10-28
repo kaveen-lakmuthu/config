@@ -3,7 +3,9 @@
     "height": 420,
     "notificationHistoryLimit": 25,
     "padding": 16,
+    "radius": 8,
     "rightMargin": 6,
+    "spacing": 10,
     "topMargin": 4,
     "width": 430
 }

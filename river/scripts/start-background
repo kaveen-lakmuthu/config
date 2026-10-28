@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Start the River background selected in River Control Center.
+theme="$HOME/.config/river-control-center/generated/river-theme.sh"
+RCC_BASE='#08111F'
+RCC_BACKGROUND_MODE='solid'
+RCC_WALLPAPER=''
+
+if [ -r "$theme" ]; then
+    # shellcheck disable=SC1090
+    . "$theme"
+fi
+
+pkill -x swaybg 2>/dev/null || true
+
+if [ "$RCC_BACKGROUND_MODE" = wallpaper ] && [ -f "$RCC_WALLPAPER" ]; then
+    swaybg -i "$RCC_WALLPAPER" -m fill >/dev/null 2>&1 &
+else
+    swaybg -c "$RCC_BASE" >/dev/null 2>&1 &
+fi

@@ -26,11 +26,15 @@ case ${1:-} in
             systemctl suspend
         fi
         ;;
-    always)
-        systemctl suspend
+    ac)
+        # Machines without a battery and laptops currently on external power
+        # use the AC timeout.
+        if [ "$has_battery" = false ] || [ "$on_external_power" = true ]; then
+            systemctl suspend
+        fi
         ;;
     *)
-        printf 'usage: %s {battery|always}\n' "$0" >&2
+        printf 'usage: %s {battery|ac}\n' "$0" >&2
         exit 2
         ;;
 esac

@@ -2,6 +2,20 @@
 
 runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
 state_file="$runtime_dir/river-keyboard-layout"
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/river-control-center/generated/input.conf"
+
+RCC_KEYBOARD_LAYOUTS='us lk'
+RCC_COMPOSE_KEY='compose:rctrl'
+if [ -r "$config_file" ]; then
+    . "$config_file"
+fi
+
+layout_enabled() {
+    case " $RCC_KEYBOARD_LAYOUTS " in
+        *" $1 "*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
 
 current_layout() {
     if [ -r "$state_file" ]; then
@@ -10,25 +24,27 @@ current_layout() {
         layout='us'
     fi
 
-    case "$layout" in
-        us|lk) printf '%s\n' "$layout" ;;
-        *)     printf '%s\n' 'us' ;;
-    esac
+    if layout_enabled "$layout"; then
+        printf '%s\n' "$layout"
+    else
+        printf '%s\n' 'us'
+    fi
 }
 
 set_layout() {
     case "$1" in
-        us|lk) ;;
+        us|lk) layout_enabled "$1" || return 2 ;;
         *) return 2 ;;
     esac
 
-    # Keep Caps Lock and Alt behavior intact; use Right Ctrl as Compose.
-    if riverctl keyboard-layout \
-        -options 'compose:rctrl' \
-        "$1"
+    if { [ -n "$RCC_COMPOSE_KEY" ] &&
+            riverctl keyboard-layout -options "$RCC_COMPOSE_KEY" "$1"; } ||
+        { [ -z "$RCC_COMPOSE_KEY" ] && riverctl keyboard-layout "$1"; }
     then
         printf '%s\n' "$1" > "$state_file"
+        return 0
     fi
+    return 1
 }
 
 status() {
@@ -37,7 +53,11 @@ status() {
             printf '%s\n' '{"text":"සිං","class":"sinhala","tooltip":"Sinhala (phonetic) · click to switch to English (US)"}'
             ;;
         *)
-            printf '%s\n' '{"text":"US","class":"english","tooltip":"English (US) · click to switch to Sinhala (phonetic)"}'
+            if layout_enabled lk; then
+                printf '%s\n' '{"text":"US","class":"english","tooltip":"English (US) · click to switch to Sinhala (phonetic)"}'
+            else
+                printf '%s\n' '{"text":"US","class":"english","tooltip":"English (US) · only enabled layout"}'
+            fi
             ;;
     esac
 }
@@ -48,15 +68,18 @@ case ${1:-status} in
         set_layout "$2"
         ;;
     toggle)
-        if [ "$(current_layout)" = 'us' ]; then
+        if [ "$(current_layout)" = 'us' ] && layout_enabled lk; then
             set_layout lk
         else
             set_layout us
         fi
         ;;
+    apply)
+        set_layout "$(current_layout)"
+        ;;
     status) status ;;
     *)
-        printf 'usage: %s {set us|set lk|toggle|status}\n' "$0" >&2
+        printf 'usage: %s {set us|set lk|toggle|apply|status}\n' "$0" >&2
         exit 2
         ;;
 esac

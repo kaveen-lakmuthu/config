@@ -1,0 +1,60 @@
+#!/bin/sh
+set -eu
+
+runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
+pid_file="$runtime_dir/river-fusuma.pid"
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/fusuma/config.yml"
+
+is_running() {
+    [ -r "$pid_file" ] || return 1
+    read -r pid expected_start < "$pid_file" || return 1
+    case "$pid" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    case "$expected_start" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    current_start=$(awk '{print $22}' "/proc/$pid/stat" 2>/dev/null) || return 1
+    [ "$current_start" = "$expected_start" ] && kill -0 "$pid" 2>/dev/null
+}
+
+stop() {
+    if is_running; then
+        kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+}
+
+start() {
+    is_running && return 0
+    [ -r "$config_file" ] || return 1
+
+    fusuma --config="$config_file" >/dev/null 2>&1 &
+    pid=$!
+    process_start=$(awk '{print $22}' "/proc/$pid/stat" 2>/dev/null) || {
+        kill "$pid" 2>/dev/null || true
+        return 1
+    }
+    printf '%s %s\n' "$pid" "$process_start" > "$pid_file"
+}
+
+case ${1:-start} in
+    start) start ;;
+    stop) stop ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if is_running; then
+            printf 'running (%s)\n' "$pid"
+        else
+            printf 'stopped\n'
+            exit 1
+        fi
+        ;;
+    *)
+        printf 'usage: %s {start|stop|restart|status}\n' "$0" >&2
+        exit 2
+        ;;
+esac

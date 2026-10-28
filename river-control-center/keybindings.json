@@ -1,0 +1,437 @@
+{
+    "bindings": [
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/keyboard-layout toggle'",
+            "id": "layout-left",
+            "key": "Shift_L",
+            "label": "Toggle keyboard layout (left)",
+            "mode": "normal",
+            "modifiers": "Alt"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/keyboard-layout toggle'",
+            "id": "layout-right",
+            "key": "Shift_R",
+            "label": "Toggle keyboard layout (right)",
+            "mode": "normal",
+            "modifiers": "Alt"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/keyboard-layout toggle'",
+            "id": "layout-left-reverse",
+            "key": "Alt_L",
+            "label": "Toggle keyboard layout (left reverse)",
+            "mode": "normal",
+            "modifiers": "Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/keyboard-layout toggle'",
+            "id": "layout-right-reverse",
+            "key": "Alt_R",
+            "label": "Toggle keyboard layout (right reverse)",
+            "mode": "normal",
+            "modifiers": "Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn foot",
+            "id": "terminal",
+            "key": "Return",
+            "label": "Terminal",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn fuzzel",
+            "id": "launcher",
+            "key": "D",
+            "label": "Application launcher",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn dolphin",
+            "id": "files",
+            "key": "T",
+            "label": "File manager",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn 'systemctl --user start emacs.service && emacsclient --create-frame --no-wait'",
+            "id": "emacs",
+            "key": "E",
+            "label": "Emacs client",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.local/bin/brave-kwallet'",
+            "id": "browser",
+            "key": "B",
+            "label": "Brave Origin",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "close",
+            "id": "close",
+            "key": "Q",
+            "label": "Close focused window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "exit",
+            "id": "exit",
+            "key": "E",
+            "label": "Exit River",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "focus-view next",
+            "id": "focus-next",
+            "key": "J",
+            "label": "Focus next window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "focus-view previous",
+            "id": "focus-previous",
+            "key": "K",
+            "label": "Focus previous window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "swap next",
+            "id": "swap-next",
+            "key": "J",
+            "label": "Swap with next window",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "swap previous",
+            "id": "swap-previous",
+            "key": "K",
+            "label": "Swap with previous window",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "focus-output next",
+            "id": "output-next",
+            "key": "Period",
+            "label": "Focus next monitor",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "focus-output previous",
+            "id": "output-previous",
+            "key": "Comma",
+            "label": "Focus previous monitor",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-to-output next",
+            "id": "send-output-next",
+            "key": "Period",
+            "label": "Send window to next monitor",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-to-output previous",
+            "id": "send-output-previous",
+            "key": "Comma",
+            "label": "Send window to previous monitor",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "zoom",
+            "id": "zoom",
+            "key": "Z",
+            "label": "Promote window to main",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-ratio -0.05'",
+            "id": "ratio-down",
+            "key": "H",
+            "label": "Decrease main ratio",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-ratio +0.05'",
+            "id": "ratio-up",
+            "key": "L",
+            "label": "Increase main ratio",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-count +1'",
+            "id": "main-count-up",
+            "key": "H",
+            "label": "Increase main count",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-count -1'",
+            "id": "main-count-down",
+            "key": "L",
+            "label": "Decrease main count",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-location top'",
+            "id": "main-top",
+            "key": "Up",
+            "label": "Put main area at top",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-location right'",
+            "id": "main-right",
+            "key": "Right",
+            "label": "Put main area at right",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-location bottom'",
+            "id": "main-bottom",
+            "key": "Down",
+            "label": "Put main area at bottom",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "send-layout-cmd rivertile 'main-location left'",
+            "id": "main-left",
+            "key": "Left",
+            "label": "Put main area at left",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "toggle-float",
+            "id": "toggle-float",
+            "key": "Space",
+            "label": "Toggle window floating",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/layout-mode toggle'",
+            "id": "global-layout",
+            "key": "Space",
+            "label": "Toggle tiled/floating mode",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "toggle-fullscreen",
+            "id": "fullscreen",
+            "key": "F",
+            "label": "Toggle fullscreen",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/waybar/scripts/desktop-panel.py clipboard'",
+            "id": "clipboard",
+            "key": "V",
+            "label": "Clipboard history",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/river/scripts/screenshot full'",
+            "id": "screenshot-full",
+            "key": "Print",
+            "label": "Screenshot all outputs",
+            "mode": "normal",
+            "modifiers": "None"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/river/scripts/screenshot region'",
+            "id": "screenshot-region",
+            "key": "Print",
+            "label": "Screenshot region",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/river/scripts/screenshot annotate'",
+            "id": "screenshot-annotate",
+            "key": "Print",
+            "label": "Screenshot and annotate",
+            "mode": "normal",
+            "modifiers": "Super+Shift"
+        },
+        {
+            "category": "keyboard",
+            "command": "spawn '$HOME/.config/river/scripts/lock-screen'",
+            "id": "lock",
+            "key": "L",
+            "label": "Lock screen",
+            "mode": "normal",
+            "modifiers": "Super+Control"
+        },
+        {
+            "category": "mouse",
+            "command": "move-view",
+            "id": "pointer-move",
+            "key": "BTN_LEFT",
+            "label": "Move floating window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "mouse",
+            "command": "resize-view",
+            "id": "pointer-resize",
+            "key": "BTN_RIGHT",
+            "label": "Resize floating window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "mouse",
+            "command": "toggle-float",
+            "id": "pointer-float",
+            "key": "BTN_MIDDLE",
+            "label": "Toggle floating window",
+            "mode": "normal",
+            "modifiers": "Super"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+'",
+            "id": "volume-up",
+            "key": "XF86AudioRaiseVolume",
+            "label": "Volume up",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-'",
+            "id": "volume-down",
+            "key": "XF86AudioLowerVolume",
+            "label": "Volume down",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'",
+            "id": "volume-mute",
+            "key": "XF86AudioMute",
+            "label": "Toggle output mute",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle'",
+            "id": "mic-mute",
+            "key": "XF86AudioMicMute",
+            "label": "Toggle microphone mute",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'playerctl play-pause'",
+            "id": "media-play",
+            "key": "XF86AudioPlay",
+            "label": "Play or pause media",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'playerctl next'",
+            "id": "media-next",
+            "key": "XF86AudioNext",
+            "label": "Next media track",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn 'playerctl previous'",
+            "id": "media-previous",
+            "key": "XF86AudioPrev",
+            "label": "Previous media track",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn '$HOME/.config/river/scripts/brightness up'",
+            "id": "brightness-up",
+            "key": "XF86MonBrightnessUp",
+            "label": "Brightness up",
+            "mode": "both",
+            "modifiers": "None"
+        },
+        {
+            "category": "media",
+            "command": "spawn '$HOME/.config/river/scripts/brightness down'",
+            "id": "brightness-down",
+            "key": "XF86MonBrightnessDown",
+            "label": "Brightness down",
+            "mode": "both",
+            "modifiers": "None"
+        }
+    ],
+    "schemaVersion": 1
+}

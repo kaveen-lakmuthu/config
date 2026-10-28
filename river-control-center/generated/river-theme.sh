@@ -13,3 +13,5 @@ RCC_BORDER_UNFOCUSED='#27374A'
 RCC_BORDER_WIDTH=2
 RCC_VIEW_PADDING=0
 RCC_OUTER_PADDING=0
+RCC_BACKGROUND_MODE='wallpaper'
+RCC_WALLPAPER='/home/kaveen/.config/river/wallpapers/moonlit-numenorean-harbour-v7.png'

@@ -1,16 +1,38 @@
 {
     "appearance": {
         "accent": "#D6AE4A",
+        "backgroundMode": "wallpaper",
         "base": "#08111F",
         "borderUnfocused": "#27374A",
+        "fonts": {
+            "footFamily": "Hack",
+            "footSize": 10.5,
+            "fuzzelFamily": "Noto Sans",
+            "fuzzelSize": 11,
+            "makoFamily": "Noto Sans",
+            "makoSize": 10,
+            "panelFamily": "Noto Sans",
+            "panelSize": 10,
+            "waybarFamily": "Noto Sans"
+        },
         "highlight": "#79AFC7",
+        "interfaceRadius": 8,
         "mutedText": "#A8B4C3",
+        "panelSpacing": 10,
         "secondaryAccent": "#4C83C3",
         "secondarySurface": "#17283D",
         "success": "#5F9C83",
         "surface": "#101C2C",
         "text": "#EEF2F6",
-        "urgent": "#B94747"
+        "themeTargets": {
+            "foot": true,
+            "fuzzel": true,
+            "mako": true,
+            "panels": true,
+            "waybar": true
+        },
+        "urgent": "#B94747",
+        "wallpaperPath": "/home/kaveen/.config/river/wallpapers/moonlit-numenorean-harbour-v7.png"
     },
     "bar": {
         "batteryCritical": 12,
@@ -33,6 +55,29 @@
         },
         "tagPadding": 6
     },
+    "input": {
+        "gestures": {
+            "deviceName": "MSFT0001:00 04F3:31BE Touchpad",
+            "direction": "left-next",
+            "fingerCount": 3
+        },
+        "keyboard": {
+            "composeKey": "compose:rctrl",
+            "layouts": [
+                "us",
+                "lk"
+            ],
+            "repeatDelay": 300,
+            "repeatRate": 50
+        },
+        "touchpad": {
+            "clickMethod": "clickfinger",
+            "disableWhileTyping": true,
+            "naturalScroll": true,
+            "pointerAcceleration": 0.1,
+            "tap": true
+        }
+    },
     "panels": {
         "clipboardHistoryLimit": 40,
         "height": 420,
@@ -42,10 +87,179 @@
         "topMargin": 4,
         "width": 430
     },
+    "powerAndIdle": {
+        "acSuspendTimeoutMinutes": 60,
+        "actions": {
+            "displayOff": true,
+            "lock": true,
+            "suspendOnAc": true,
+            "suspendOnBattery": true
+        },
+        "batterySuspendTimeoutMinutes": 30,
+        "defaultPowerProfile": "balanced",
+        "displayOffTimeoutMinutes": 15,
+        "lockBeforeSuspend": true,
+        "lockTimeoutMinutes": 10,
+        "nightLightStart": "18:00",
+        "nightLightStop": "06:00"
+    },
     "river": {
         "borderWidth": 2,
         "outerPadding": 0,
         "viewPadding": 0
     },
-    "schemaVersion": 2
+    "schemaVersion": 7,
+    "sessionStartup": {
+        "fusuma": true,
+        "kanshi": true,
+        "mako": true,
+        "swayidle": true,
+        "waybar": true
+    },
+    "windowManagement": {
+        "defaultAttachMode": "bottom",
+        "defaultLayout": "tiled",
+        "focusPolicy": "mode-aware",
+        "mainCount": 1,
+        "mainPosition": "left",
+        "mainRatio": 0.6,
+        "rules": [
+            {
+                "action": "ssd",
+                "appId": "emacs",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "pavucontrol",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "blueman-manager",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "nm-connection-editor",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "org.kde.kcalc",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "org.kde.haruna",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "haruna",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "vlc",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "org.videolan.VLC",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "xdg-desktop-portal-gtk",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "org.freedesktop.impl.portal.desktop.gtk",
+                "titleContains": ""
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "Open File"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "Save File"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "Save As"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "Choose File"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "Select File"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "File Upload"
+            },
+            {
+                "action": "float",
+                "appId": "",
+                "titleContains": "wants to open"
+            },
+            {
+                "action": "float",
+                "appId": "firefox",
+                "titleContains": "Download"
+            },
+            {
+                "action": "float",
+                "appId": "firefox",
+                "titleContains": "Opening "
+            },
+            {
+                "action": "float",
+                "appId": "org.mozilla.firefox",
+                "titleContains": "Download"
+            },
+            {
+                "action": "float",
+                "appId": "org.mozilla.firefox",
+                "titleContains": "Opening "
+            },
+            {
+                "action": "float",
+                "appId": "brave-origin",
+                "titleContains": "Download"
+            },
+            {
+                "action": "float",
+                "appId": "brave-origin",
+                "titleContains": "Opening "
+            },
+            {
+                "action": "float",
+                "appId": "com.brave.Origin",
+                "titleContains": "Download"
+            },
+            {
+                "action": "float",
+                "appId": "com.brave.Origin",
+                "titleContains": "Opening "
+            },
+            {
+                "appId": "mapl-player",
+                "titleContains": "",
+                "action": "float"
+            }
+        ],
+        "tagCount": 9
+    }
 }

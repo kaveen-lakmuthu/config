@@ -12,3 +12,5 @@
 @define-color rcc_border_unfocused #27374A;
 @define-color rcc_subtle_text mix(#A8B4C3, #101C2C, 0.68);
 @define-color rcc_occupied mix(#EEF2F6, #A8B4C3, 0.36);
+* { font-family: "Noto Sans", sans-serif; font-size: 11px; }
+#tags, #tags button, #clock, #essentials, #tray, #custom-system-menu { border-radius: 8px; }

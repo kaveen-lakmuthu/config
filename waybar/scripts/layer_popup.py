@@ -14,6 +14,27 @@ from gi.repository import Gdk, Gtk, GtkLayerShell
 SETTINGS_PATH = os.path.expanduser(
     "~/.config/river-control-center/generated/panel-settings.json"
 )
+THEME_PATH = os.path.expanduser(
+    "~/.config/river-control-center/generated/panel-theme.css"
+)
+
+
+def install_generated_theme():
+    """Apply the optional shared panel theme after each panel's base CSS."""
+
+    if not os.path.isfile(THEME_PATH):
+        return
+    provider = Gtk.CssProvider()
+    try:
+        provider.load_from_path(THEME_PATH)
+    except Exception as error:  # GTK reports CSS parser failures as GLib errors.
+        print(f"Could not load generated panel theme: {error}")
+        return
+    Gtk.StyleContext.add_provider_for_screen(
+        Gdk.Screen.get_default(),
+        provider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1,
+    )
 
 
 def panel_settings():
@@ -108,3 +129,4 @@ def configure_layer_popup(
 
     backdrop.connect("button-press-event", dismiss_outside)
     window.add(backdrop)
+    install_generated_theme()

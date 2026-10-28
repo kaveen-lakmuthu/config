@@ -24,6 +24,7 @@ below use Fedora's `dnf`; names may differ on another distribution.
 | tmux | `tmux/` | Wayland clipboard, sessions, panes, popups and matching theme |
 | Neovim | `nvim/` | IDE-like editing, LSP, formatters, Git integration and matching theme |
 | Doom Emacs | `doom/`, `desktop-entries/emacs.desktop` | Editor modules, titleless PGTK frames and daemon-backed clients |
+| Fastfetch | `fastfetch/` | Compact system summary with a custom terminal-coloured logo |
 | River Control Center data | `river-control-center/` | Settings, backups and generated desktop integration fragments |
 | GTK/KDE appearance | `gtk-3.0/`, `gtk-4.0/`, `kdeglobals` | Consistent Breeze Dark application appearance |
 
@@ -53,7 +54,7 @@ sudo dnf install \
   breeze-icon-theme breeze-gtk-gtk3 breeze-gtk-gtk4 \
   google-noto-sans-fonts google-noto-sans-sinhala-fonts \
   google-noto-color-emoji-fonts \
-  tmux fzf neovim emacs-pgtk ripgrep fd-find git
+  tmux fzf neovim emacs-pgtk fastfetch ripgrep fd-find git
 ```
 
 To build the optional River Control Center, install the Qt/Kirigami development
@@ -61,7 +62,7 @@ tools as well:
 
 ```sh
 sudo dnf install \
-  gcc-c++ cmake ninja-build \
+  gcc-c++ cmake ninja-build pkgconf-pkg-config wayland-devel \
   qt6-qtbase-devel qt6-qtdeclarative-devel \
   kf6-kirigami-devel kf6-qqc2-desktop-style
 ```
@@ -104,8 +105,9 @@ sudo udevadm trigger --subsystem-match=input --action=change
 ```
 
 Log out and back in, then check that `fusuma --list-devices` sees the touchpad.
-The Fusuma filter currently names `MSFT0001:00 04F3:31BE Touchpad`; update
-`fusuma/config.yml` when restoring onto different hardware.
+The Fusuma filter currently names `MSFT0001:00 04F3:31BE Touchpad`. Select the
+correct device on River Control Center's **Input** page when restoring onto
+different hardware; `fusuma/config.yml` is generated from that setting.
 
 ## Restore the configuration
 
@@ -182,9 +184,11 @@ runtime data under `river-control-center/`: the active settings, ten rotating
 backups and generated fragments consumed by River, Waybar, Mako, Foot, Fuzzel
 and the custom GTK panels.
 
-The Qt 6/QML/Kirigami application manages the shared semantic palette, River
-border width and rivertile spacing, Waybar dimensions and module visibility,
-clock and battery settings, notification retention and popup geometry.
+The Qt 6/QML/Kirigami application manages the shared semantic palette,
+component fonts, wallpaper or solid background, reusable custom themes,
+River layout and graphical window rules, Waybar dimensions and module
+visibility, clock and battery settings, notification retention and popup
+geometry. Saved themes live under `river-control-center/themes/`.
 
 Build and install it for the current user with:
 
@@ -199,16 +203,48 @@ configuration check:
 
 ```sh
 river-control-center --check
+river-control-center --list-windows
+river-control-center --export-keybindings
 ```
 
 After restoring the repository, `river-control-center --regenerate` recreates
 all generated theme fragments from `settings.json` without changing the live
 session.
 
-River borders, Waybar, Mako and the solid background update live when Apply is
+River borders, Waybar, Mako and the swaybg background update live when Apply is
 pressed inside River. Foot and Fuzzel read the new theme when next launched.
 Rivertile padding is applied when River next starts because River Classic does
 not expose runtime padding commands.
+
+The **Appearance** page previews Waybar, Mako, Fuzzel and Foot independently,
+warns about low-contrast colour combinations, and lets individual components
+stop following future shared-theme changes. It deliberately does not edit GTK
+or KDE application themes because those settings are system-wide and would
+also affect Plasma.
+
+The **Windows** page controls the rivertile main ratio, main count and
+position, attach mode, global tiled/floating default, focus-follows-pointer
+policy and tag count. Its rule editor can match River app IDs and title text,
+apply float/tiled or server/client-decoration actions, and test a rule against
+the live window list. Rules apply to subsequently opened windows; decoration
+rules may also affect existing ones. Tag count is generated consistently for
+River keybindings, Waybar and Fusuma.
+
+The **Keybindings** page searches and edits keyboard, mouse and media
+shortcuts, shows the exact River command behind each entry, detects conflicting
+chords, and can reset an individual built-in binding. Bindings live in
+`river-control-center/keybindings.json`; River's init sources the generated
+`river-control-center/generated/keybindings.sh` rather than carrying a second
+hard-coded copy. A Markdown map is generated beside it, and the page can export
+a printable copy to `~/Documents/River-Classic-Keybindings.md`.
+
+The **Session & Startup** page controls River-only autostart for Waybar, Mako,
+Kanshi, Fusuma and swayidle. It reports process counts, warns about duplicates,
+offers targeted River-session restarts, checks portal backends and
+`river-session.target`, and labels components as River-only or shared with
+Plasma. Its generated settings live in
+`river-control-center/generated/session-startup.conf`; portals remain under
+D-Bus/systemd activation.
 
 ## Waybar integrations
 
@@ -234,9 +270,10 @@ The custom panels are GTK 3 layer-shell programs:
   pointer merely leaves it. `SYS` turns gold for DND/idle
   inhibition and red while the microphone is active.
 - `night-light` controls `wlsunset` and exposes its state to Waybar.
-- `keyboard-layout` switches between US English and Sinhala phonetic and uses
-  Right Ctrl as the Compose key. It resets to US when River starts and before
-  the lock screen opens.
+- `keyboard-layout` switches between the layouts enabled on River Control
+  Center's **Input** page. English (US) remains mandatory for password entry;
+  Sinhala phonetic can be disabled and the Compose key can be reassigned. It
+  resets to US before the lock screen opens.
 - `layout-mode` toggles every connected output between rivertile and River's
   floating fallback. `Super+Shift+Space` performs the same toggle, and Kanshi
   reapplies the current mode after docking or undocking. Windows explicitly
@@ -292,12 +329,26 @@ The configured River session:
 1. locks after 10 minutes idle;
 2. powers displays off through `wlopm` after 15 minutes;
 3. suspends on battery after 30 minutes;
-4. suspends on either power source after 60 minutes;
+4. suspends on AC power after 60 minutes;
 5. locks before system sleep.
 
+These values, their individual enable switches, the default power profile and
+the fixed night-light schedule are managed on River Control Center's **Power &
+Idle** page. Applying a change restarts only the PID-tracked `swayidle` process
+owned by River. Waybar's idle inhibitor prevents its timeouts while enabled.
+
 Lid-close suspend remains logind/system policy; locking the screen does not
-prevent it. Waybar's idle inhibitor prevents the `swayidle` timeouts while it
-is enabled.
+prevent it. The control center reports the active lid policy but does not
+modify it.
+
+## Input
+
+River Control Center manages tap-to-click, natural scrolling, click method,
+disable-while-typing and pointer acceleration for devices matching
+`*Touchpad`. It also controls keyboard repeat timing, the optional Sinhala
+layout, Compose key, and Fusuma swipe finger count and direction. Input changes
+are applied immediately through `riverctl`; only the PID-tracked River Fusuma
+process is restarted when its generated configuration changes.
 
 ## Foot and tmux
 

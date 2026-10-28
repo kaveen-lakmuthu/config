@@ -168,7 +168,7 @@ class QuickSettings(Gtk.Window):
         self.mic_scroll_remainder = 0.0
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=panel_setting("spacing", 12))
         outer.set_border_width(panel_setting("padding", 16))
         card.pack_start(outer, True, True, 0)
         configure_layer_popup(self, card, "quick-settings", top=4, right=6)

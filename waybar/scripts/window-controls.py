@@ -68,7 +68,7 @@ class WindowControls(Gtk.Window):
         self.connect("key-press-event", self.on_key_press)
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=9)
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=panel_setting("spacing", 9))
         outer.set_border_width(panel_setting("padding", 16))
         card.pack_start(outer, True, True, 0)
         configure_layer_popup(
