@@ -20,7 +20,7 @@ below use Fedora's `dnf`; names may differ on another distribution.
 | gtklock / swaylock | `gtklock/`, `swaylock/` | Styled lock screen and fallback |
 | Fusuma | `fusuma/` | Three-finger tag switching gestures |
 | XDG portals | `xdg-desktop-portal/` | GTK generic portals, wlr screenshots/casting, KWallet secrets |
-| systemd user target | `systemd/user/river-session.target` | Marks River as the active graphical session |
+| systemd user units | `systemd/user/` | River session target and automatic Waybar recovery |
 | tmux | `tmux/` | Wayland clipboard, sessions, panes, popups and matching theme |
 | Neovim | `nvim/` | IDE-like editing, LSP, formatters, Git integration and matching theme |
 | Doom Emacs | `doom/`, `desktop-entries/emacs.desktop` | Editor modules, titleless PGTK frames and daemon-backed clients |
@@ -124,9 +124,13 @@ then starts `river-session.target`. That target pulls in
 portal service from `river/init`; D-Bus/systemd activates portals after the
 session environment has been imported.
 
-The River-only processes—Waybar, Mako, Kanshi, Fusuma and the other applets—are
-started by `river/init`, not as always-running user services. This prevents
-them from also appearing in Plasma.
+River's init starts `waybar.service` when Waybar autostart is enabled. The
+drop-in at `systemd/user/waybar.service.d/river.conf` restarts Waybar after a
+failure with a two-second delay and stops it with the River session. Leave
+the service disabled globally so River's autostart setting controls it.
+View its logs with `journalctl --user -u waybar.service`.
+
+Mako, Kanshi, Fusuma and the other applets are started directly by `river/init`.
 
 ## Hardware-specific changes
 

@@ -127,7 +127,8 @@ if [ "$RCC_AUTOSTART_MAKO" = true ]; then
     mako &
 fi
 if [ "$RCC_AUTOSTART_WAYBAR" = true ]; then
-    waybar &
+    # Recover automatically if display hotplug/resume breaks Wayland dispatch.
+    systemctl --user start waybar.service
 fi
 nm-applet --indicator &
 blueman-applet &
