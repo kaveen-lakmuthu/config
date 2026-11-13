@@ -130,9 +130,11 @@ if [ "$RCC_AUTOSTART_WAYBAR" = true ]; then
     # Recover automatically if display hotplug/resume breaks Wayland dispatch.
     systemctl --user start waybar.service
 fi
-nm-applet --indicator &
+# Indicator libraries fall back to GtkStatusIcon when the tray host disappears.
+# That GTK API requires X11, including while reconnecting to Waybar's SNI tray.
+env GDK_BACKEND=x11 nm-applet --indicator &
 blueman-applet &
-udiskie --tray &
+env GDK_BACKEND=x11 udiskie --tray --appindicator &
 if [ "$RCC_AUTOSTART_FUSUMA" = true ]; then
     $HOME/.config/river/scripts/start-fusuma start
 fi

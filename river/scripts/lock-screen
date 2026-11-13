@@ -11,6 +11,10 @@ if pgrep -u "$(id -u)" -x gtklock >/dev/null 2>&1 ||
     exit 0
 fi
 
+# River waits for a lock frame on every output. Wake idle-powered-off displays
+# so the locker can present those frames before River's 200 ms deadline.
+wlopm --on '*' >/dev/null 2>&1 || true
+
 # gtklock provides the live date/clock and full password form. Keep the styled
 # swaylock path as a safe fallback until gtklock is installed.
 if command -v gtklock >/dev/null 2>&1; then

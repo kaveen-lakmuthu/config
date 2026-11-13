@@ -53,6 +53,9 @@ start() {
     if [ "$RCC_DISPLAY_OFF_ON_IDLE" = true ]; then
         set -- "$@" timeout "$RCC_DISPLAY_OFF_TIMEOUT" \
             "wlopm --off '*'" resume "wlopm --on '*'"
+        # A system resume need not generate input to trigger the timeout's
+        # resume command. Restore output power while the session stays locked.
+        set -- "$@" after-resume "wlopm --on '*'"
     fi
     if [ "$RCC_SUSPEND_ON_BATTERY" = true ]; then
         set -- "$@" timeout "$RCC_BATTERY_SUSPEND_TIMEOUT" \

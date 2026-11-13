@@ -131,6 +131,11 @@ the service disabled globally so River's autostart setting controls it.
 View its logs with `journalctl --user -u waybar.service`.
 
 Mako, Kanshi, Fusuma and the other applets are started directly by `river/init`.
+The network and drive applets use per-process `GDK_BACKEND=x11` so their
+indicator libraries can safely fall back to `GtkStatusIcon` during tray host
+changes. Their Waybar icons still use StatusNotifierItem over D-Bus;
+`udiskie --appindicator` selects that protocol explicitly. Xwayland must be
+enabled in River for these two applets.
 
 ## Hardware-specific changes
 
@@ -340,6 +345,12 @@ These values, their individual enable switches, the default power profile and
 the fixed night-light schedule are managed on River Control Center's **Power &
 Idle** page. Applying a change restarts only the PID-tracked `swayidle` process
 owned by River. Waybar's idle inhibitor prevents its timeouts while enabled.
+
+The lock helper wakes idle-powered-off displays before starting a new locker,
+so River can present lock frames on every output within its rendering deadline.
+When display-off-on-idle is enabled, swayidle also restores output power after
+system resume without waiting for keyboard or pointer input. An existing
+locker keeps control of the session throughout suspend and resume.
 
 Lid-close suspend remains logind/system policy; locking the screen does not
 prevent it. The control center reports the active lid policy but does not
