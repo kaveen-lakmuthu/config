@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# River sends SIGTERM to init's process group when the compositor exits.
+# systemd services run outside that group, so stop their session target too.
+trap 'exit 0' HUP INT TERM
+trap 'systemctl --user stop river-session.target' EXIT
+
+sleep infinity &
+wait "$!"

@@ -118,11 +118,17 @@ scripts in `river/`, `waybar/` and `tmux/`. Then reload the user systemd manager
 systemctl --user daemon-reload
 ```
 
-The River init exports the Wayland desktop environment to D-Bus and systemd,
-then starts `river-session.target`. That target pulls in
+The River init exports the Wayland and Xwayland display environment to D-Bus
+and systemd, then starts `river-session.target`. That target pulls in
 `graphical-session.target`. Do not manually start the generic target or either
 portal service from `river/init`; D-Bus/systemd activates portals after the
 session environment has been imported.
+
+`river/scripts/session-lifecycle` stays in River's init process group and stops
+`river-session.target` when River sends SIGTERM on logout. This also lets the
+generic graphical-session target stop, so a later Plasma login waits for its
+own display before starting KDE applets. The systemd and D-Bus environments
+include `DISPLAY` and `XAUTHORITY` for services that need Xwayland.
 
 River's init starts `waybar.service` when Waybar autostart is enabled. The
 drop-in at `systemd/user/waybar.service.d/river.conf` restarts Waybar after a

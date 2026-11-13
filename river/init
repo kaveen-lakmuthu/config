@@ -78,6 +78,8 @@ fi
 
 dbus-update-activation-environment --systemd \
     WAYLAND_DISPLAY \
+    DISPLAY \
+    XAUTHORITY \
     XDG_CURRENT_DESKTOP \
     XDG_SESSION_DESKTOP \
     XDG_SESSION_TYPE \
@@ -89,6 +91,8 @@ dbus-update-activation-environment --systemd \
 
 systemctl --user import-environment \
     WAYLAND_DISPLAY \
+    ${DISPLAY+DISPLAY} \
+    ${XAUTHORITY+XAUTHORITY} \
     XDG_CURRENT_DESKTOP \
     XDG_SESSION_DESKTOP \
     XDG_SESSION_TYPE \
@@ -101,6 +105,10 @@ systemctl --user import-environment \
 # Tell systemd that River is the active graphical session. This target pulls
 # in graphical-session.target; do not start graphical-session.target directly.
 systemctl --user start river-session.target
+
+# River terminates init's process group on logout. Retire the session target
+# then, so a later Plasma login waits for its own display before autostart.
+"$HOME/.config/river/scripts/session-lifecycle" &
 
 # -----------------------------------------------------------------------------
 # Background services
