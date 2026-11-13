@@ -414,7 +414,19 @@ install -Dm0644 ~/.config/desktop-entries/emacs.desktop \
 systemctl --user enable --now emacs.service
 ```
 
-No custom Emacs service or service override is required.
+The drop-in at `systemd/user/emacs.service.d/doom.conf` points the packaged
+service at the Doom installation in `~/.config/emacs`.
+
+After upgrading or downgrading Emacs, rebuild Doom's generated startup files
+and packages for the installed version before starting the daemon:
+
+```sh
+~/.config/emacs/bin/doom sync -U --rebuild
+systemctl --user restart emacs.service
+```
+
+Doom's startup files and package builds are specific to the Emacs version.
+`-U` keeps the installed package revisions during the rebuild.
 
 Keep `doom/snippets/` present for personal YASnippet templates. Doom supplies
 its own language snippets; this directory is where local additions belong:
